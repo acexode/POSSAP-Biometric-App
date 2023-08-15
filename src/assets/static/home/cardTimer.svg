@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 59.1 (101010) - https://sketch.com -->
+    <title>EF16BA4D-EF94-4849-A5AE-E5B81F064864</title>
+    <desc>Created with sketchtool.</desc>
+    <g id="Web-Design" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Style-Guide-(Incomplete)" transform="translate(-213.000000, -327.000000)">
+            <g id="Group-20-Copy" transform="translate(213.000000, 327.000000)">
+                <g id="icon" fill="#FF0062">
+                    <rect id="icon-bd" x="0" y="0" width="50" height="50" rx="19"></rect>
+                </g>
+                <g id="Credit-card.2" transform="translate(10.000000, 13.000000)">
+                    <g id="Group" stroke-linecap="round" stroke-linejoin="round" transform="translate(3.000000, 3.000000)" stroke="#FFFFFF" stroke-width="1.5">
+                        <path d="M18.4152725,22.3635069 C15.0256347,22.3635069 12.2768483,19.5817352 12.2768483,16.1514217 C12.2768483,12.7211082 15.0256347,9.93933642 18.4152725,9.93933642 C21.806138,9.93933642 24.5536967,12.7211082 24.5536967,16.1514217 C24.5536967,19.5817352 21.806138,22.3635069 18.4152725,22.3635069" id="Path"></path>
+                        <line x1="0" y1="4.78330565" x2="23.3260119" y2="4.78330565" id="Path"></line>
+                        <path d="M12.2768483,16.1514217 L2.45536967,16.1514217 C1.09877793,16.1514217 0,15.0394584 0,13.6665876 L0,2.4848341 C0,1.11196326 1.09877793,0 2.45536967,0 L20.8706422,0 C22.2272339,0 23.3260119,1.11196326 23.3260119,2.4848341" id="Path"></path>
+                        <line x1="23.3260119" y1="2.4848341" x2="23.3260119" y2="12.4241705" id="Path"></line>
+                        <line x1="17.7891533" y1="13.5920426" x2="17.7891533" y2="16.101725" id="Path"></line>
+                        <line x1="17.7891533" y1="16.101725" x2="20.2690766" y2="16.101725" id="Path"></line>
+                    </g>
+                    <polygon id="Path" points="0 0 30 0 30 30 0 30"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

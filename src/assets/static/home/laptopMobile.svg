@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 59.1 (101010) - https://sketch.com -->
+    <title>5B523C3C-8197-4E1F-A6CE-3483FBBF6FAE</title>
+    <desc>Created with sketchtool.</desc>
+    <g id="Web-Design" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Style-Guide-(Incomplete)" transform="translate(-359.000000, -327.000000)">
+            <g id="Group-18-Copy" transform="translate(359.000000, 327.000000)">
+                <rect id="icon-bd" fill="#00B7BD" x="0" y="0" width="50" height="50" rx="19"></rect>
+                <g id="Laptop,-Mobile-Copy" transform="translate(10.000000, 11.000000)">
+                    <g id="Group">
+                        <polygon id="Path" points="0 0 29.917735 0 29.917735 29.917735 0 29.917735"></polygon>
+                        <path d="M24.9314459,12.4657229 L24.9314459,4.98628917 C24.9314459,4.29818127 24.3729815,3.73971688 23.6848736,3.73971688 L4.98628917,3.73971688 C4.29818127,3.73971688 3.73971688,4.29818127 3.73971688,4.98628917 L3.73971688,18.6985844" id="Path" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M18.6985844,22.4383013 L3.73971688,22.4383013 C3.05160897,22.4383013 2.49314459,21.8798369 2.49314459,21.191729 L2.49314459,19.9451567 C2.49314459,19.2570488 3.05160897,18.6985844 3.73971688,18.6985844 L18.6985844,18.6985844" id="Path" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M25.9698406,26.1780182 L20.1520877,26.1780182 C19.3492951,26.1780182 18.6985844,25.5273074 18.6985844,24.7232683 L18.6985844,14.5425124 C18.6985844,13.7397198 19.3492951,13.0877625 20.1533343,13.0877625 L25.9710872,13.0877625 C26.7738797,13.0877625 27.425837,13.7384732 27.425837,14.5425124 L27.425837,24.7232683 C27.4245905,25.5273074 26.7738797,26.1780182 25.9698406,26.1780182 Z" id="Path" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <line x1="18.6985844" y1="22.4383013" x2="27.4245905" y2="22.4383013" id="Path" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
