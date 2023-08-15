@@ -3,7 +3,7 @@ import getUrlString from '../../utils/get-url-string';
 import { LOGIN } from '../../constants/api-routes';
 
 export default async function loginUser(data) {
-  const url = getUrlString(LOGIN);
+  const url = getUrlString(LOGIN) + LOGIN;
   console.log(data);
   const response = await axios.post(url, data);
 
