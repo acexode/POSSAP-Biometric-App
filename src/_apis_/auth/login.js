@@ -3,19 +3,21 @@ import getUrlString from "../../utils/get-url-string";
 import { LOGIN } from "../../constants/api-routes";
 import { computeCBSBody } from "../../utils/computeBody";
 
-export const loginUrl = getUrlString(LOGIN) + LOGIN;
+export const loginUrl = getUrlString(LOGIN);
 
+import config from '../../config.json'
 export default async function loginUser(data) {
   console.log(data);
   const body = computeCBSBody(
     "post",
-    url,
+    loginUrl,
     {},
     "",
-    hashString,
+    '',
     data
   );
-  const response = await axios.post(url, body);
+  const configUrl = config.middlewareApi + '/fetch-data'
+  const response = await axios.post(configUrl, body);
 
   // if (!response.ok) {
   //   throw new Error(`Error occurred while trying to login user`);

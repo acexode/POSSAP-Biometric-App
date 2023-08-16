@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { isValidToken, setSession } from '../utils/jwt';
 
 import { LoginUser } from '../_apis_/auth';
-import { loginUrl } from '../_apis_/auth/login';
+import loginUser, { loginUrl } from '../_apis_/auth/login';
 
 // ----------------------------------------------------------------------
 
@@ -112,16 +112,16 @@ function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     console.log(email);
-    const dataObject = {email, password};
-    const urlencoded = new URLSearchParams();
-    Object.keys(dataObject).forEach((key) => {
-      urlencoded.append(key, dataObject[key]);
-    });
-    const req = {
-      method: 'post',
-      body: urlencoded
-    }
-     const response = await fetch(loginUrl, req);
+    // const dataObject = {email, password};
+    // const urlencoded = new URLSearchParams();
+    // Object.keys(dataObject).forEach((key) => {
+    //   urlencoded.append(key, dataObject[key]);
+    // });
+    // const req = {
+    //   method: 'post',
+    //   body: urlencoded
+    // }
+     const response = await loginUser({UserName: email, Password: password});
     const { data, token } = response.data;
     console.log(data)
     localStorage.setItem('possap-user', JSON.stringify(data));
