@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { isValidToken, setSession } from '../utils/jwt';
 
 import { LoginUser } from '../_apis_/auth';
+import { loginUrl } from '../_apis_/auth/login';
 
 // ----------------------------------------------------------------------
 
@@ -98,14 +99,33 @@ function AuthProvider({ children }) {
     initialize();
   }, []);
 
+  useEffect(() => {
+    const date = new Date();
+    const token = localStorage.getItem('possap-token');
+    const timeDifference = (date - token) / 1000;
+    setTimeout(() => {
+      if(timeDifference >= 30) {
+        dispatch({ type: 'LOGOUT' });
+      }
+    }, 1000);
+  },[])
+
   const login = async (email, password) => {
     console.log(email);
-    // const response = await LoginUser({
-    //   email,
-    //   password
-    // });
-    // const { data, token } = response.data;
-    localStorage.setItem('possap-user', JSON.stringify({email}));
+    const dataObject = {email, password};
+    const urlencoded = new URLSearchParams();
+    Object.keys(dataObject).forEach((key) => {
+      urlencoded.append(key, dataObject[key]);
+    });
+    const req = {
+      method: 'post',
+      body: urlencoded
+    }
+     const response = await fetch(loginUrl, req);
+    const { data, token } = response.data;
+    console.log(data)
+    localStorage.setItem('possap-user', JSON.stringify(data));
+    localStorage.setItem('possap-token', new Date().getTime());
     setSession('token');
     dispatch({
       type: 'LOGIN',
