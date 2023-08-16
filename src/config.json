@@ -1,3 +1,4 @@
 {
-    "ApiUrl": "http://test.possap.ng/api/v1/pss"
+    "ApiUrl": "http://test.possap.ng/api/v1/pss",
+    "middlewareApi": "https://possapbackend-development.ogtlprojects.com/api/v1"
 }
