@@ -1,4 +1,6 @@
 {
     "ApiUrl": "http://test.possap.ng/api/v1/pss",
-    "middlewareApi": "https://possapbackend-development.ogtlprojects.com/api/v1"
+    "middlewareApi": "https://possapbackend-development.ogtlprojects.com/api/v1",
+    "clientId": "Y7QPxyDubDXbjCEuJgKxXvBwxfta/Qo90Ud9MA//eMs=",
+    "clientSecret": "qZOY7rCujzVv0mbZCCDJ1vLRaInVAuML/U68FUyDyOhXEsiqP5vgLhIVSUjD",
 }

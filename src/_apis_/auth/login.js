@@ -2,7 +2,7 @@ import axios from "axios";
 import getUrlString from "../../utils/get-url-string";
 import { LOGIN } from "../../constants/api-routes";
 import { computeCBSBody } from "../../utils/computeBody";
-
+import config from '../../config.json'
 export default async function loginUser(data) {
   const url = getUrlString(LOGIN) + LOGIN;
   console.log(data);
@@ -14,7 +14,7 @@ export default async function loginUser(data) {
     hashString,
     data
   );
-  const response = await axios.post(url, body);
+  const response = await axios.post(config.middlewareApi, body);
 
   // if (!response.ok) {
   //   throw new Error(`Error occurred while trying to login user`);

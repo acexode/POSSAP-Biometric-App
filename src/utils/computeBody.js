@@ -1,3 +1,4 @@
+import config from '../config.json'
 export const computeCBSBody = (
     method,
     url,
@@ -17,7 +18,7 @@ export const computeCBSBody = (
           url,
           hashField,
           hashmessage,
-          clientSecret: environment.clientSecret,
+          clientSecret: config.clientSecret,
         },
       },
     };
