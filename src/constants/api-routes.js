@@ -1,4 +1,4 @@
 // Auth API
-export const LOGIN = '/proxyauthentication/signin';
-export const FIND_FILE = '/user-request-list/request-details/';
+export const LOGIN = 'login/signin';
+export const FIND_FILE = 'api/v1/pss/CharacterCertificate/details/';
 

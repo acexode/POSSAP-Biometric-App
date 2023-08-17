@@ -4,7 +4,6 @@ import { LOGIN } from "../../constants/api-routes";
 import { computeCBSBody } from "../../utils/computeBody";
 export const loginUrl = getUrlString(LOGIN);
 
-import config from "../../config.json";
 export default async function loginUser(data) {
   console.log(data);
   const body = computeCBSBody(
