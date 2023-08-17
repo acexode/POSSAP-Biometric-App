@@ -99,15 +99,16 @@ function AuthProvider({ children }) {
     initialize();
   }, []);
 
-  useEffect(() => {
-    const date = new Date();
-    const token = localStorage.getItem('possap-token');
-    const timeDifference = (date - token) / 1000;
+  const setLoginTimeout = () => {
+    const timelimit = 30 * 60 * 1000;
     setTimeout(() => {
-      if(timeDifference >= 30) {
-        dispatch({ type: 'LOGOUT' });
-      }
-    }, 1000);
+      setSession(null);
+      dispatch({ type: 'LOGOUT' });
+    }, timelimit);
+  }
+
+  useEffect(() => {
+    setLoginTimeout();
   },[])
 
   const login = async (email, password) => {
@@ -133,6 +134,7 @@ function AuthProvider({ children }) {
         user: {email}
       }
     });
+    setLoginTimeout();
     // initialize();
   };
 
