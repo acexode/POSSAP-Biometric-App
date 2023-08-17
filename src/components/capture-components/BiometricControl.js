@@ -24,7 +24,6 @@ import {
 
 import { MIconButton } from "../@material-extend";
 import Label from "../Label";
-import ColorSinglePicker from "../ColorSinglePicker";
 
 // ----------------------------------------------------------------------
 
