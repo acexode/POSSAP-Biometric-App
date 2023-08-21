@@ -22,11 +22,14 @@ import { LoadingButton } from '@material-ui/lab';
 
 
 import useIsMountedRef from '../../hooks/useIsMountedRef';
+import { findFileUrl } from '../../_apis_/findFile';
+import useAuth from '../../hooks/useAuth';
+import { MIconButton } from '../@material-extend';
 
 // ----------------------------------------------------------------------
 
 export default function FindFileComponent() {
-
+  const { findFile } = useAuth();
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
@@ -43,8 +46,8 @@ export default function FindFileComponent() {
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
         console.log(values);
-        // await login(values.fileNumber, values.password);
-        enqueueSnackbar('Login success', {
+        await findFile(values.fileNumber);
+        enqueueSnackbar('Search successful', {
           variant: 'success',
           action: (key) => (
             <MIconButton size="small" onClick={() => closeSnackbar(key)}>
