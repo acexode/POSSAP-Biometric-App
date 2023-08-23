@@ -1,6 +1,4 @@
 import React from "react";
-// mock api
-// import "./_apis_";
 
 // scroll bar
 import "simplebar/src/simplebar.css";
@@ -41,13 +39,11 @@ ReactDOM.render(
     <QueryClientProvider client={queryClient}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <SettingsProvider>
-
-            <BrowserRouter>
-              <AuthProvider>
-                <App />
-              </AuthProvider>
-            </BrowserRouter>
-
+          <BrowserRouter>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </BrowserRouter>
         </SettingsProvider>
       </LocalizationProvider>
     </QueryClientProvider>

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 // utils
 import { isValidToken, setSession } from '../utils/jwt';
 
 import { LoginUser } from '../_apis_/auth';
+import loginUser, { loginUrl } from '../_apis_/auth/login';
+import fetchFile, { findFileUrl } from '../_apis_/findFile';
 
 // ----------------------------------------------------------------------
 
@@ -55,6 +57,7 @@ AuthProvider.propTypes = {
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [fileResult, setFileResult] = useState();
   const initialize = async () => {
     try {
       const accessToken = window.localStorage.getItem('accessToken');
@@ -98,14 +101,37 @@ function AuthProvider({ children }) {
     initialize();
   }, []);
 
+  const setLoginTimeout = () => {
+    const timelimit = 30 * 60 * 1000;
+    setTimeout(() => {
+      setSession(null);
+      dispatch({ type: 'LOGOUT' });
+    }, timelimit);
+  }
+
+  useEffect(() => {
+    setLoginTimeout();
+  },[])
+
   const login = async (email, password) => {
     console.log(email);
-    // const response = await LoginUser({
-    //   email,
-    //   password
+    // const dataObject = {email, password};
+    // const urlencoded = new URLSearchParams();
+    // Object.keys(dataObject).forEach((key) => {
+    //   urlencoded.append(key, dataObject[key]);
     // });
-    // const { data, token } = response.data;
-    localStorage.setItem('possap-user', JSON.stringify({email}));
+    // const req = {
+    //   method: 'post',
+    //   body: urlencoded
+    // }
+    const response = await loginUser({Email: email, Password: password});
+    const { data, token } = response.data;
+    console.log(data)
+    localStorage.setItem('possap-user', JSON.stringify({
+      username: email,
+      token: data.ResponseObject
+    }));
+    localStorage.setItem('possap-token', new Date().getTime());
     setSession('token');
     dispatch({
       type: 'LOGIN',
@@ -113,6 +139,7 @@ function AuthProvider({ children }) {
         user: {email}
       }
     });
+    setLoginTimeout();
     // initialize();
   };
 
@@ -120,6 +147,12 @@ function AuthProvider({ children }) {
     setSession(null);
     dispatch({ type: 'LOGOUT' });
   };
+
+  const findFile = async (fileNumber) => {
+    const response = await fetchFile(fileNumber);
+    setFileResult(response.data.data.ResponseObject)
+    console.log(response.data.data.ResponseObject)
+  }
 
 
   return (
@@ -129,6 +162,8 @@ function AuthProvider({ children }) {
         method: 'jwt',
         login,
         logout,
+        findFile,
+        fileResult
       }}
     >
       {children}

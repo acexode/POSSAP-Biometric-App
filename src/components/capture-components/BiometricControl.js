@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 
 import plusFill from "@iconify/icons-eva/plus-fill";
@@ -19,8 +19,10 @@ import {
   Chip,
   FormControlLabel,
   RadioGroup,
-  Radio, MenuItem, Grid,
-    Card
+  Radio,
+  MenuItem,
+  Grid,
+  Card,
 } from "@material-ui/core";
 
 import { MIconButton } from "../@material-extend";
@@ -39,18 +41,18 @@ const RootStyle = styled("div")(({ theme }) => ({
 const FINGERS = [" Little", " Ring", " Middle", " Index", " Thumb"];
 const fingerCapture = [
   {
-    label :"Right Hand",
-    value: "RH"
+    label: "Right Hand",
+    value: "RH",
   },
   {
     label: "Left Hand",
-    value: "LH"
+    value: "LH",
   },
   {
-    label:"Two Thumbs",
-    value: "TT"
-  }
-]
+    label: "Two Thumbs",
+    value: "TT",
+  },
+];
 // ----------------------------------------------------------------------
 
 const Incrementer = (props) => {
@@ -111,20 +113,25 @@ const Incrementer = (props) => {
   );
 };
 
-export default function BiometricControl({ applicantInfo,isDeviceConnected,device,Fun_LRTCapture }) {
+export default function BiometricControl({
+  applicantInfo,
+  isDeviceConnected,
+  device,
+  Fun_LRTCapture,
+}) {
   // const [device,setDevice] = useState("")
   // const [isDeviceConnected,setIsDeviceConnected] = useState(false)
-  const [selectedFinger,setSelectedFinger] = useState("")
+  const [selectedFinger, setSelectedFinger] = useState("");
   const captureType = ["Left Hand", "Right Hand", "Two Thumb"];
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      Id: '',
-      FileNumber: 'PCC339393',
-      ApplicantName: 'Sir Abubakar',
-      LeftFourFingerPrint: '',
-      RightFourFingerPrint: '',
-      TwoThumbPrint: '',
+      Id: "",
+      FileNumber: "PCC339393",
+      ApplicantName: "Sir Abubakar",
+      LeftFourFingerPrint: "",
+      RightFourFingerPrint: "",
+      TwoThumbPrint: "",
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
@@ -137,40 +144,69 @@ export default function BiometricControl({ applicantInfo,isDeviceConnected,devic
   const { values, touched, errors, getFieldProps, handleSubmit } = formik;
 
   const handleCapture = () => {
-    console.log({selectedFinger})
-    Fun_LRTCapture(selectedFinger)
+    console.log({ selectedFinger });
+    Fun_LRTCapture(selectedFinger);
   };
-
 
   return (
     <RootStyle>
       <FormikProvider value={formik}>
-        <Card sx={{mb: 2}}>
-          <Typography style={{ padding:2, textAlign:"center"}}> Preview </Typography>
-          <Typography style={{ padding:2, textAlign:"center"}}>  <span id="msg_id" style={{fontSize:"15px", fontWeight:"bold"}}>&nbsp;</span>
-            <span id="Q1_id" style={{fontSize:"15px", fontWeight:"bold"}}>&nbsp;</span>
-            <span id="Q2_id" style={{fontSize:"15px", fontWeight:"bold"}}>&nbsp;</span>
-            <span id="Q3_id" style={{fontSize:"15px", fontWeight:"bold"}}>&nbsp;</span>
-            <span id="Q4_id" style={{fontSize:"15px", fontWeight:"bold"}}>&nbsp;</span></Typography>
+        <Card sx={{ mb: 2 }}>
+          <Typography style={{ padding: 2, textAlign: "center" }}>
+            {" "}
+            Preview{" "}
+          </Typography>
+          <Typography style={{ padding: 2, textAlign: "center" }}>
+            {" "}
+            <span id="msg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+              &nbsp;
+            </span>
+            <span id="Q1_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+              &nbsp;
+            </span>
+            <span id="Q2_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+              &nbsp;
+            </span>
+            <span id="Q3_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+              &nbsp;
+            </span>
+            <span id="Q4_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+              &nbsp;
+            </span>
+          </Typography>
 
-        <img id="img_id" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="375"  alt={""}/>
-      <Typography style={{textAlign:"center", margin:2}}>  <span id="cmsg_id" style={{fontSize:"15px", fontWeight:"bold"}}>&nbsp;</span></Typography>
+          <img
+            id="img_id"
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+            width="400"
+            height="375"
+            alt={""}
+          />
+          <Typography style={{ textAlign: "center", margin: 2 }}>
+            {" "}
+            <span id="cmsg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+              &nbsp;
+            </span>
+          </Typography>
         </Card>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          {isDeviceConnected ? <Label
+          {isDeviceConnected ? (
+            <Label
               variant="ghost"
               color="success"
-              sx={{textTransform: "uppercase"}}
-          >
-            Device Connected
-          </Label> :
-            <Label
-            variant="ghost"
-            color="error"
-            sx={{textTransform: "uppercase"}}
+              sx={{ textTransform: "uppercase" }}
             >
-            Device not Connected
-            </Label>}
+              Device Connected
+            </Label>
+          ) : (
+            <Label
+              variant="ghost"
+              color="error"
+              sx={{ textTransform: "uppercase" }}
+            >
+              Device not Connected
+            </Label>
+          )}
           <Typography
             variant="overline"
             sx={{
@@ -192,12 +228,14 @@ export default function BiometricControl({ applicantInfo,isDeviceConnected,devic
             direction="row"
             alignItems="center"
             sx={{ mb: 2 }}
-          >{device}</Stack>
+          >
+            {device}
+          </Stack>
 
           <Divider sx={{ borderStyle: "dashed" }} />
 
           <Stack spacing={3} sx={{ my: 3 }}>
-          <Stack direction="row" justifyContent="space-between">
+            <Stack direction="row" justifyContent="space-between">
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 Applicant Name
               </Typography>
@@ -211,7 +249,7 @@ export default function BiometricControl({ applicantInfo,isDeviceConnected,devic
                 />
               </div>
             </Stack>
-          <Stack direction="row" justifyContent="space-between">
+            <Stack direction="row" justifyContent="space-between">
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 File Number
               </Typography>
@@ -231,18 +269,18 @@ export default function BiometricControl({ applicantInfo,isDeviceConnected,devic
                 Capture Finger
               </Typography>
               <TextField
-                  variant="outlined"
-                  select
-                  value={selectedFinger}
-                  onChange={(e) => setSelectedFinger(e.target.value)}
+                variant="outlined"
+                select
+                value={selectedFinger}
+                onChange={(e) => setSelectedFinger(e.target.value)}
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
                 {fingerCapture.map((finger) => (
-                    <MenuItem key={finger.value} value={finger.value}>
-                      {finger.label}
-                    </MenuItem>
+                  <MenuItem key={finger.value} value={finger.value}>
+                    {finger.label}
+                  </MenuItem>
                 ))}
               </TextField>
               {/*<Select*/}
@@ -308,8 +346,6 @@ export default function BiometricControl({ applicantInfo,isDeviceConnected,devic
               {/*  )}*/}
               {/*/>*/}
             </Stack>
-
-          
           </Stack>
           <Divider sx={{ borderStyle: "dashed" }} />
 
