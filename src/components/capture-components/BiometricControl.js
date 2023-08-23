@@ -118,9 +118,10 @@ export default function BiometricControl({
   isDeviceConnected,
   device,
   Fun_LRTCapture,
+   previewImg,
+                                           fingerRef
 }) {
-  // const [device,setDevice] = useState("")
-  // const [isDeviceConnected,setIsDeviceConnected] = useState(false)
+
   const [selectedFinger, setSelectedFinger] = useState("");
   const captureType = ["Left Hand", "Right Hand", "Two Thumb"];
   const formik = useFormik({
@@ -151,7 +152,7 @@ export default function BiometricControl({
   return (
     <RootStyle>
       <FormikProvider value={formik}>
-        <Card sx={{ mb: 2 }}>
+        <Card sx={{ mb: 2 }} ref={fingerRef}>
           <Typography style={{ padding: 2, textAlign: "center" }}>
             {" "}
             Preview{" "}
@@ -159,19 +160,19 @@ export default function BiometricControl({
           <Typography style={{ padding: 2, textAlign: "center" }}>
             {" "}
             <span id="msg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-              &nbsp;
+            {previewImg?.msg}
             </span>
             <span id="Q1_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-              &nbsp;
+              {previewImg?.imgQuality_1}
             </span>
             <span id="Q2_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-              &nbsp;
+              {previewImg?.imgQuality_2}
             </span>
             <span id="Q3_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-              &nbsp;
+              {previewImg?.imgQuality_3}
             </span>
             <span id="Q4_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-              &nbsp;
+              {previewImg?.imgQuality_4}
             </span>
           </Typography>
 
@@ -185,7 +186,7 @@ export default function BiometricControl({
           <Typography style={{ textAlign: "center", margin: 2 }}>
             {" "}
             <span id="cmsg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-              &nbsp;
+            {previewImg?.cmsg}
             </span>
           </Typography>
         </Card>

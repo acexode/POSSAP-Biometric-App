@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { Box, Card, Grid, Container } from "@material-ui/core";
 
 // components
@@ -9,6 +9,12 @@ import { CapturedDataCarousel, BiometricControl } from "../../components/capture
 export default function CapturePage() {
   const [device,setDevice] = useState("")
   const [isDeviceConnected,setIsDeviceConnected] = useState(false)
+  const [previewImg, setPreviewImg] = useState();
+  const [rightFourFingers, setRightFourFingers] = useState();
+  const [leftFourFingers, setLeftFourFingers] = useState();
+  const [twoThumbs, setTwoThumbs] = useState();
+  const fingerRef = useRef(null);
+
   const applicantInfo = {
     id: "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1",
     cover: "https://d.newsweek.com/en/full/1916156/shorthair-cat-covid.webp?w=790&f=0d5da0facb3b8ddb7a997de2229b34cc",
@@ -92,25 +98,6 @@ export default function CapturePage() {
     gender: "Kids",
   };
 
-  const data =[
-    {
-      img: "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==",
-      id: "img_LS",
-      title: "Left Hand"
-    },
-    {
-      img: "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==",
-      id: "img_TT",
-      title: "Two Thumbs"
-    },
-    {
-      img: "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==",
-      id: "img_RS",
-      title: "Right Hand"
-    },
-
-  ]
-
   useEffect(()=>{
     function Fun_DeviceInfo() {
 
@@ -175,23 +162,14 @@ export default function CapturePage() {
 
           if(result.imgData!=="")
           {
+            setPreviewImg(result);
 
-            document.getElementById("Q1_id").innerText =result.imgQuality_1;
-            document.getElementById("Q2_id").innerText =result.imgQuality_2;
-            document.getElementById("Q3_id").innerText =result.imgQuality_3;
-            document.getElementById("Q4_id").innerText =result.imgQuality_4;
-            document.getElementById("msg_id").innerText =result.msg;
-            document.getElementById("cmsg_id").innerText =result.cmsg;
             document.getElementById('img_id').setAttribute('src', "data:image/png;base64,"+result.imgData);
           }
           else
           {
-            document.getElementById("Q1_id").innerText =" ";
-            document.getElementById("Q2_id").innerText =" ";
-            document.getElementById("Q3_id").innerText =" ";
-            document.getElementById("Q4_id").innerText =" ";
-            document.getElementById("msg_id").innerText =" ";
-            document.getElementById("cmsg_id").innerText =" ";
+            setPreviewImg(undefined);
+
             document.getElementById('img_id').setAttribute('src', "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==");
           }
         }
@@ -209,25 +187,11 @@ export default function CapturePage() {
 
   function Fun_LRTCapture(capType) {
     let capMode = "PLAIN";
-    // document.getElementById("dstatus").value="capture";
-    // document.getElementById("ds_id").innerText ="";
+;
     Fun_Live_Preview();
+    fingerRef?.current?.scrollIntoView();
     let mf_value = "";
-    // const markedCheckbox = document.getElementsByName('chkmfingers');
-    // for (const checkbox of markedCheckbox) {
-    //   if (checkbox.checked)
-    //   {
-    //     if(mf_value==="")
-    //       mf_value=checkbox.value;
-    //     else
-    //       mf_value=mf_value+","+checkbox.value;
-    //   }
-    // }
 
-
-    // const imgf_value = document.getElementById("imgformat").value;
-    // const isoFMRf_value = document.getElementById("isoFMRformat").value;
-    // const isoFIRf_value = document.getElementById("isoFIRformat").value;
     const isNewSession_value = "Yes";
 
 
@@ -249,8 +213,6 @@ export default function CapturePage() {
         const nfid = "nid" + i;
         const imgid = "img_id" + i;
         console.log({nfid,imgid})
-        // document.getElementById(nfid).innerText = "";
-        // document.getElementById(imgid).setAttribute('src', "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==");
       }
     }
 
@@ -271,23 +233,20 @@ export default function CapturePage() {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         const status = xhr.status;
-        // document.getElementById("dstatus").value="";
         if (status === 200) {
           const result = JSON.parse(xhr.responseText);
-          // document.getElementById("isNewSession").value=result.isNewSession;
           if(result.errMsg!=="")
-              // document.getElementById("ds_id").innerText =result.errMsg;
             console.log(result);
 
           const scount = result.slapCount;
           for (let i = 0; i < scount; i++) {
             const stype = result.slaps[i].slapType;
             if(stype==="Left_Slap")
-              document.getElementById("img_LS").setAttribute('src', "data:image/"+result.slaps[i].imgType.toLowerCase()+";base64,"+result.slaps[i].imgData);
+              setLeftFourFingers(result.slaps[i]);
             if(stype==="Two_Thumbs")
-              document.getElementById("img_TT").setAttribute('src', "data:image/"+result.slaps[i].imgType.toLowerCase()+";base64,"+result.slaps[i].imgData);
+              setTwoThumbs(result.slaps[i]);
             if(stype==="Right_Slap")
-              document.getElementById("img_RS").setAttribute('src', "data:image/"+result.slaps[i].imgType.toLowerCase()+";base64,"+result.slaps[i].imgData);
+              setRightFourFingers(result.slaps[i]);
           }
 
 
@@ -295,17 +254,13 @@ export default function CapturePage() {
           for (let i = 0; i < fcount; i++) {
             const fidx = result.fingers[i].fingerNo;
             const nfid = "nid" + fidx;
-            // document.getElementById(nfid).innerText = "NFIQ:"+result.fingers[i].imgQuality;
             const imgid = "img_id" + fidx;
             const tempid = "ftemplate" + fidx;
-            console.log({imgid,tempid})
-            // document.getElementById(imgid).setAttribute('src', "data:image/"+result.fingers[i].imgType.toLowerCase()+";base64,"+result.fingers[i].imgData);
-            // document.getElementById(tempid).value = result.fingers[i].isoFMRData;
+
           }
         }
         else {
           console.log("Capture : Suprema RealScan Web Agent Service is not Ruuning");
-          // document.getElementById("ds_id").innerText="Suprema Service is not Ruuning";
         }
       }
     };
@@ -320,10 +275,10 @@ export default function CapturePage() {
             <Card sx={{mt: 2}} >
               <Grid container>
                 <Grid item xs={12} md={6} lg={7}>
-                  <CapturedDataCarousel applicantInfo={applicantInfo} />
+                  <CapturedDataCarousel twoThumbs={twoThumbs} leftFourFingers={leftFourFingers} rightFourFingers={rightFourFingers} applicantInfo={applicantInfo} />
                 </Grid>
                 <Grid item xs={12} md={6} lg={5}>
-                  <BiometricControl applicantInfo={applicantInfo} device={device} Fun_LRTCapture={Fun_LRTCapture} isDeviceConnected={isDeviceConnected} />
+                  <BiometricControl fingerRef={fingerRef} previewImg={previewImg} applicantInfo={applicantInfo} device={device} Fun_LRTCapture={Fun_LRTCapture} isDeviceConnected={isDeviceConnected} />
                 </Grid>
               </Grid>
             </Card>

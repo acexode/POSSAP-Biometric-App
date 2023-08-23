@@ -88,7 +88,7 @@ function ThumbnailItem({ item }) {
   );
 }
 
-export default function CapturedDataCarousel({applicantInfo}) {
+export default function CapturedDataCarousel({applicantInfo,twoThumbs,leftFourFingers,rightFourFingers}) {
   const [openLightbox, setOpenLightbox] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -158,19 +158,25 @@ export default function CapturedDataCarousel({applicantInfo}) {
 
           <Slider {...settings1} asNavFor={nav2} ref={slider1}>
               <div>
-                  <img id="img_LS" alt={""} src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="375" />
+                  <img id="img_LS" alt={""} src={ leftFourFingers
+                      ? `data:image/${leftFourFingers?.imgType};base64,${leftFourFingers?.imgData}`
+                      : "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="} width="400" height="375" />
                   <Typography variant="h5" style={{fontSize:"1rem", textAlign:"center"}} paragraph>
                       Left Four Fingers
                   </Typography>
               </div>
               <div>
-                  <img id="img_RS" alt={""} src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="375" />
+                  <img id="img_RS" alt={""} src={ rightFourFingers
+                      ? `data:image/${rightFourFingers?.imgType};base64,${rightFourFingers?.imgData}`
+                      : "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="} width="400" height="375" />
                   <Typography variant="h5" style={{fontSize:"1rem", textAlign:"center"}} paragraph>
                       Right Four Fingers
                   </Typography>
               </div>
               <div>
-                  <img id="img_TT" alt={""} src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="375" />
+                  <img id="img_TT" alt={""} src={ twoThumbs
+                      ? `data:image/${twoThumbs?.imgType};base64,${twoThumbs?.imgData}`
+                      : "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="} width="400" height="375" />
                   <Typography variant="h5" style={{fontSize:"1rem", textAlign:"center"}} paragraph>
                       Two Thumbs
                   </Typography>
