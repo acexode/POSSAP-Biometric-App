@@ -20,9 +20,10 @@ export default function CapturePage() {
     cover: "https://d.newsweek.com/en/full/1916156/shorthair-cat-covid.webp?w=790&f=0d5da0facb3b8ddb7a997de2229b34cc",
     images: [
       "https://previews.123rf.com/images/rclassenlayouts/rclassenlayouts1201/rclassenlayouts120100408/18834360-animal-paw-pet-wolf-paw-paw-bear-footprint-animal-paw-cat-paw-fingerprint-impression.jpg",
-      "https://images.pexels.com/photos/1774986/pexels-photo-1774986.jpeg?auto=compress&cs=tinysrgb&w=600",
-      "https://images.pexels.com/photos/1774986/pexels-photo-1774986.jpeg?auto=compress&cs=tinysrgb&w=600",
-    ],
+      "https://previews.123rf.com/images/rclassenlayouts/rclassenlayouts1201/rclassenlayouts120100408/18834360-animal-paw-pet-wolf-paw-paw-bear-footprint-animal-paw-cat-paw-fingerprint-impression.jpg",
+      "https://previews.123rf.com/images/rclassenlayouts/rclassenlayouts1201/rclassenlayouts120100408/18834360-animal-paw-pet-wolf-paw-paw-bear-footprint-animal-paw-cat-paw-fingerprint-impression.jpg",
+      // "https://images.pexels.com/photos/1774986/pexels-photo-1774986.jpeg?auto=compress&cs=tinysrgb&w=600",
+     ],
     name: "Nike Air Force 1 NDESTRUKT",
     code: "38BEE270",
     sku: "WW75K5210YW/SV",
@@ -164,13 +165,13 @@ export default function CapturePage() {
           {
             setPreviewImg(result);
 
-            document.getElementById('img_id').setAttribute('src', "data:image/png;base64,"+result.imgData);
+            // document.getElementById('img_id').setAttribute('src', "data:image/png;base64,"+result.imgData);
           }
           else
           {
             setPreviewImg(undefined);
 
-            document.getElementById('img_id').setAttribute('src', "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==");
+            // document.getElementById('img_id').setAttribute('src', "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==");
           }
         }
         else {
@@ -275,10 +276,10 @@ export default function CapturePage() {
             <Card sx={{mt: 2}} >
               <Grid container>
                 <Grid item xs={12} md={6} lg={7}>
-                  <CapturedDataCarousel twoThumbs={twoThumbs} leftFourFingers={leftFourFingers} rightFourFingers={rightFourFingers} applicantInfo={applicantInfo} />
+                  <CapturedDataCarousel previewImg={previewImg} twoThumbs={twoThumbs} leftFourFingers={leftFourFingers} rightFourFingers={rightFourFingers} applicantInfo={applicantInfo} />
                 </Grid>
                 <Grid item xs={12} md={6} lg={5}>
-                  <BiometricControl fingerRef={fingerRef} previewImg={previewImg} applicantInfo={applicantInfo} device={device} Fun_LRTCapture={Fun_LRTCapture} isDeviceConnected={isDeviceConnected} />
+                  <BiometricControl  applicantInfo={applicantInfo} device={device} Fun_LRTCapture={Fun_LRTCapture} isDeviceConnected={isDeviceConnected} />
                 </Grid>
               </Grid>
             </Card>

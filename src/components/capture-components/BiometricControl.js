@@ -118,8 +118,6 @@ export default function BiometricControl({
   isDeviceConnected,
   device,
   Fun_LRTCapture,
-   previewImg,
-                                           fingerRef
 }) {
 
   const [selectedFinger, setSelectedFinger] = useState("");
@@ -152,44 +150,6 @@ export default function BiometricControl({
   return (
     <RootStyle>
       <FormikProvider value={formik}>
-        <Card sx={{ mb: 2 }} ref={fingerRef}>
-          <Typography style={{ padding: 2, textAlign: "center" }}>
-            {" "}
-            Preview{" "}
-          </Typography>
-          <Typography style={{ padding: 2, textAlign: "center" }}>
-            {" "}
-            <span id="msg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-            {previewImg?.msg}
-            </span>
-            <span id="Q1_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-              {previewImg?.imgQuality_1}
-            </span>
-            <span id="Q2_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-              {previewImg?.imgQuality_2}
-            </span>
-            <span id="Q3_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-              {previewImg?.imgQuality_3}
-            </span>
-            <span id="Q4_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-              {previewImg?.imgQuality_4}
-            </span>
-          </Typography>
-
-          <img
-            id="img_id"
-            src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-            width="400"
-            height="375"
-            alt={""}
-          />
-          <Typography style={{ textAlign: "center", margin: 2 }}>
-            {" "}
-            <span id="cmsg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
-            {previewImg?.cmsg}
-            </span>
-          </Typography>
-        </Card>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           {isDeviceConnected ? (
             <Label

@@ -61,7 +61,7 @@ const ThumbImgStyle = styled('img')({
 });
 
 // ----------------------------------------------------------------------
-
+const defaultImg = "https://previews.123rf.com/images/rclassenlayouts/rclassenlayouts1201/rclassenlayouts120100408/18834360-animal-paw-pet-wolf-paw-paw-bear-footprint-animal-paw-cat-paw-fingerprint-impression.jpg"
 LargeItem.propTypes = {
   item: PropTypes.string,
   onOpenLightbox: PropTypes.func
@@ -70,7 +70,9 @@ LargeItem.propTypes = {
 function LargeItem({ item, onOpenLightbox }) {
   return (
     <Box sx={{ cursor: 'zoom-in', paddingTop: '100%', position: 'relative' }}>
-      <LargeImgStyle width="400" height="375" id={item?.id} alt={item?.title} src={item?.img} onClick={() => onOpenLightbox(item)} />
+
+      <LargeImgStyle width="400" height="375" id={item?.id} alt={item.img} src={item?.img} onClick={() => onOpenLightbox(item?.img)} />
+
     </Box>
   );
 }
@@ -88,7 +90,7 @@ function ThumbnailItem({ item }) {
   );
 }
 
-export default function CapturedDataCarousel({applicantInfo,twoThumbs,leftFourFingers,rightFourFingers}) {
+export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs,leftFourFingers,rightFourFingers}) {
   const [openLightbox, setOpenLightbox] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -107,7 +109,26 @@ export default function CapturedDataCarousel({applicantInfo,twoThumbs,leftFourFi
   useEffect(() => {
    console.log(applicantInfo);
   }, [])
-  
+
+    const capturedImages =[
+        {
+            id:1,
+            title:"Left Hand",
+            img: leftFourFingers ? `data:image/${leftFourFingers?.imgType};base64,${leftFourFingers?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : defaultImg
+        },
+        {
+            id:2,
+            title:"Right Hand",
+            img: rightFourFingers ? `data:image/${rightFourFingers?.imgType};base64,${rightFourFingers?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : defaultImg
+        },
+        {
+            id:3,
+            title:"Two Thumbs",
+            img: twoThumbs ? `data:image/${twoThumbs?.imgType};base64,${twoThumbs?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : defaultImg
+
+        },
+
+    ]
 
   const settings1 = {
     dots: false,
@@ -157,34 +178,26 @@ export default function CapturedDataCarousel({applicantInfo,twoThumbs,leftFourFi
         >
 
           <Slider {...settings1} asNavFor={nav2} ref={slider1}>
-              <div>
-                  <img id="img_LS" alt={""} src={ leftFourFingers
-                      ? `data:image/${leftFourFingers?.imgType};base64,${leftFourFingers?.imgData}`
-                      : "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="} width="400" height="375" />
-                  <Typography variant="h5" style={{fontSize:"1rem", textAlign:"center"}} paragraph>
-                      Left Four Fingers
-                  </Typography>
-              </div>
-              <div>
-                  <img id="img_RS" alt={""} src={ rightFourFingers
-                      ? `data:image/${rightFourFingers?.imgType};base64,${rightFourFingers?.imgData}`
-                      : "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="} width="400" height="375" />
-                  <Typography variant="h5" style={{fontSize:"1rem", textAlign:"center"}} paragraph>
-                      Right Four Fingers
-                  </Typography>
-              </div>
-              <div>
-                  <img id="img_TT" alt={""} src={ twoThumbs
-                      ? `data:image/${twoThumbs?.imgType};base64,${twoThumbs?.imgData}`
-                      : "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="} width="400" height="375" />
-                  <Typography variant="h5" style={{fontSize:"1rem", textAlign:"center"}} paragraph>
-                      Two Thumbs
-                  </Typography>
-              </div>
+            {capturedImages?.map((item,index) => (
+             <>
+                 <Typography style={{ textAlign: "center", margin: 2 }}>
+                     {" "}
+                     <span id="cmsg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+                    {previewImg?.msg}
+                    </span>
+                 </Typography> <Typography style={{ textAlign: "center", margin: 2 }}>
+                     {" "}
+                     <span id="cmsg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+                    {previewImg?.cmsg}
+                    </span>
+                 </Typography>
+                 <LargeItem key={index} item={item} onOpenLightbox={handleOpenLightbox}   />
+                 <Typography variant="h5" style={{textAlign:"center"}} paragraph>
+                     {item?.title}
+                 </Typography>
+             </>
+            ))}
 
-            {/*{applicantInfo?.map((item,index) => (*/}
-            {/*  <LargeItem key={index} item={item} onOpenLightbox={handleOpenLightbox} />*/}
-            {/*))}*/}
           </Slider>
           <CarouselControlsArrowsIndex
             index={currentIndex}
