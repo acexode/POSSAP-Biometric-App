@@ -1,5 +1,5 @@
 {
-    "ApiUrl": "http://test.possap.ng/api/v1/pss",
+    "ApiUrl": "https://test.possap.ng/api/v1/pss",
     "middlewareApi": "https://possapbackend-development.ogtlprojects.com/api/v1",
     "cbsRoute": "https://possapbackend-development.ogtlprojects.com/api/v1/cbs-routes",
     "clientId": "Y7QPxyDubDXbjCEuJgKxXvBwxfta/Qo90Ud9MA//eMs=",
