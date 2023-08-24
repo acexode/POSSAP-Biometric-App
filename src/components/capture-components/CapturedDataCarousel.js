@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useState, useRef, useEffect } from 'react';
 // material
 import { alpha, styled } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import {Box, Typography} from '@material-ui/core';
 
 import LightboxModal from '../LightboxModal';
 import CarouselControlsArrowsIndex from '../CarouselControlsArrowsIndex';
@@ -70,7 +70,7 @@ LargeItem.propTypes = {
 function LargeItem({ item, onOpenLightbox }) {
   return (
     <Box sx={{ cursor: 'zoom-in', paddingTop: '100%', position: 'relative' }}>
-      <LargeImgStyle alt="large image" src={item} onClick={() => onOpenLightbox(item)} />
+      <LargeImgStyle width="400" height="375" id={item?.id} alt={item?.title} src={item?.img} onClick={() => onOpenLightbox(item)} />
     </Box>
   );
 }
@@ -83,12 +83,12 @@ function ThumbnailItem({ item }) {
   return (
     <ThumbWrapperStyle>
       <Box className="isActive" />
-      <ThumbImgStyle alt="thumb image" src={item} />
+      <ThumbImgStyle alt="thumb image" src={item}  />
     </ThumbWrapperStyle>
   );
 }
 
-export default function CapturedDataCarousel({applicantInfo}) {
+export default function CapturedDataCarousel({applicantInfo,twoThumbs,leftFourFingers,rightFourFingers}) {
   const [openLightbox, setOpenLightbox] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -97,7 +97,7 @@ export default function CapturedDataCarousel({applicantInfo}) {
   const slider1 = useRef(null);
   const slider2 = useRef(null);
 
-  const imagesLightbox = applicantInfo.images.map((_image) => _image);
+  const imagesLightbox = applicantInfo?.images?.map((_image) => _image);
 
   const handleOpenLightbox = (url) => {
     const selectedImage = findIndex(imagesLightbox, (index) => index === url);
@@ -131,9 +131,10 @@ export default function CapturedDataCarousel({applicantInfo}) {
   };
 
   useEffect(() => {
+
     setNav1(slider1.current);
     setNav2(slider2.current);
-  }, [currentIndex]);
+   }, [currentIndex]);
 
   const handlePrevious = () => {
     slider2.current.slickPrev();
@@ -154,10 +155,36 @@ export default function CapturedDataCarousel({applicantInfo}) {
             position: 'relative'
           }}
         >
+
           <Slider {...settings1} asNavFor={nav2} ref={slider1}>
-            {applicantInfo.images.map((item) => (
-              <LargeItem key={item} item={item} onOpenLightbox={handleOpenLightbox} />
-            ))}
+              <div>
+                  <img id="img_LS" alt={""} src={ leftFourFingers
+                      ? `data:image/${leftFourFingers?.imgType};base64,${leftFourFingers?.imgData}`
+                      : "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="} width="400" height="375" />
+                  <Typography variant="h5" style={{fontSize:"1rem", textAlign:"center"}} paragraph>
+                      Left Four Fingers
+                  </Typography>
+              </div>
+              <div>
+                  <img id="img_RS" alt={""} src={ rightFourFingers
+                      ? `data:image/${rightFourFingers?.imgType};base64,${rightFourFingers?.imgData}`
+                      : "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="} width="400" height="375" />
+                  <Typography variant="h5" style={{fontSize:"1rem", textAlign:"center"}} paragraph>
+                      Right Four Fingers
+                  </Typography>
+              </div>
+              <div>
+                  <img id="img_TT" alt={""} src={ twoThumbs
+                      ? `data:image/${twoThumbs?.imgType};base64,${twoThumbs?.imgData}`
+                      : "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="} width="400" height="375" />
+                  <Typography variant="h5" style={{fontSize:"1rem", textAlign:"center"}} paragraph>
+                      Two Thumbs
+                  </Typography>
+              </div>
+
+            {/*{applicantInfo?.map((item,index) => (*/}
+            {/*  <LargeItem key={index} item={item} onOpenLightbox={handleOpenLightbox} />*/}
+            {/*))}*/}
           </Slider>
           <CarouselControlsArrowsIndex
             index={currentIndex}
@@ -172,13 +199,15 @@ export default function CapturedDataCarousel({applicantInfo}) {
         sx={{
           my: 3,
           mx: 'auto',
+          display:"flex",
+          justifyContent:"center",
           '& .slick-current .isActive': { opacity: 1 },
-          ...(applicantInfo.images.length === 1 && { maxWidth: THUMB_SIZE * 1 + 16 }),
-          ...(applicantInfo.images.length === 2 && { maxWidth: THUMB_SIZE * 2 + 32 }),
-          ...(applicantInfo.images.length === 3 && { maxWidth: THUMB_SIZE * 3 + 48 }),
-          ...(applicantInfo.images.length === 4 && { maxWidth: THUMB_SIZE * 3 + 48 }),
-          ...(applicantInfo.images.length >= 5 && { maxWidth: THUMB_SIZE * 6 }),
-          ...(applicantInfo.images.length > 2 && {
+          ...(applicantInfo.length === 1 && { maxWidth: THUMB_SIZE * 1 + 16 }),
+          ...(applicantInfo.length === 2 && { maxWidth: THUMB_SIZE * 2 + 32 }),
+          ...(applicantInfo.length === 3 && { maxWidth: THUMB_SIZE * 3 + 48 }),
+          ...(applicantInfo.length === 4 && { maxWidth: THUMB_SIZE * 3 + 48 }),
+          ...(applicantInfo.length >= 5 && { maxWidth: THUMB_SIZE * 6 }),
+          ...(applicantInfo.length > 2 && {
             position: 'relative',
             '&:before, &:after': {
               top: 0,
@@ -197,8 +226,8 @@ export default function CapturedDataCarousel({applicantInfo}) {
         }}
       >
         <Slider {...settings2} asNavFor={nav1} ref={slider2}>
-          {applicantInfo.images.map((item) => (
-            <ThumbnailItem key={item} item={item} />
+          {applicantInfo?.images?.map((item,index) => (
+            <ThumbnailItem key={index} item={item} />
           ))}
         </Slider>
       </Box>

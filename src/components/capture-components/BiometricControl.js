@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 
 import plusFill from "@iconify/icons-eva/plus-fill";
@@ -20,10 +20,14 @@ import {
   FormControlLabel,
   RadioGroup,
   Radio,
+  MenuItem,
+  Grid,
+  Card,
 } from "@material-ui/core";
 
 import { MIconButton } from "../@material-extend";
 import Label from "../Label";
+import Select from "../../theme/overrides/Select";
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +39,20 @@ const RootStyle = styled("div")(({ theme }) => ({
 }));
 
 const FINGERS = [" Little", " Ring", " Middle", " Index", " Thumb"];
-
+const fingerCapture = [
+  {
+    label: "Right Hand",
+    value: "RH",
+  },
+  {
+    label: "Left Hand",
+    value: "LH",
+  },
+  {
+    label: "Two Thumbs",
+    value: "TT",
+  },
+];
 // ----------------------------------------------------------------------
 
 const Incrementer = (props) => {
@@ -96,22 +113,26 @@ const Incrementer = (props) => {
   );
 };
 
-export default function BiometricControl({ applicantInfo }) {
+export default function BiometricControl({
+  applicantInfo,
+  isDeviceConnected,
+  device,
+  Fun_LRTCapture,
+   previewImg,
+                                           fingerRef
+}) {
+
+  const [selectedFinger, setSelectedFinger] = useState("");
   const captureType = ["Left Hand", "Right Hand", "Two Thumb"];
-  
-
-
-
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      Id: '',
-      FileNumber: 'PCC339393',
-      ApplicantName: 'Sir Abubakar',
-      LeftFourFingerPrint: '',
-      RightFourFingerPrint: '',
-      TwoThumbPrint: '',
+      Id: "",
+      FileNumber: "PCC339393",
+      ApplicantName: "Sir Abubakar",
+      LeftFourFingerPrint: "",
+      RightFourFingerPrint: "",
+      TwoThumbPrint: "",
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
@@ -121,24 +142,72 @@ export default function BiometricControl({ applicantInfo }) {
       }
     },
   });
-
   const { values, touched, errors, getFieldProps, handleSubmit } = formik;
 
   const handleCapture = () => {
-
+    console.log({ selectedFinger });
+    Fun_LRTCapture(selectedFinger);
   };
 
   return (
     <RootStyle>
       <FormikProvider value={formik}>
+        <Card sx={{ mb: 2 }} ref={fingerRef}>
+          <Typography style={{ padding: 2, textAlign: "center" }}>
+            {" "}
+            Preview{" "}
+          </Typography>
+          <Typography style={{ padding: 2, textAlign: "center" }}>
+            {" "}
+            <span id="msg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+            {previewImg?.msg}
+            </span>
+            <span id="Q1_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+              {previewImg?.imgQuality_1}
+            </span>
+            <span id="Q2_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+              {previewImg?.imgQuality_2}
+            </span>
+            <span id="Q3_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+              {previewImg?.imgQuality_3}
+            </span>
+            <span id="Q4_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+              {previewImg?.imgQuality_4}
+            </span>
+          </Typography>
+
+          <img
+            id="img_id"
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+            width="400"
+            height="375"
+            alt={""}
+          />
+          <Typography style={{ textAlign: "center", margin: 2 }}>
+            {" "}
+            <span id="cmsg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+            {previewImg?.cmsg}
+            </span>
+          </Typography>
+        </Card>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          <Label
-            variant="ghost"
-            color="success"
-            sx={{ textTransform: "uppercase" }}
-          >
-            Device Connected
-          </Label>
+          {isDeviceConnected ? (
+            <Label
+              variant="ghost"
+              color="success"
+              sx={{ textTransform: "uppercase" }}
+            >
+              Device Connected
+            </Label>
+          ) : (
+            <Label
+              variant="ghost"
+              color="error"
+              sx={{ textTransform: "uppercase" }}
+            >
+              Device not Connected
+            </Label>
+          )}
           <Typography
             variant="overline"
             sx={{
@@ -160,12 +229,14 @@ export default function BiometricControl({ applicantInfo }) {
             direction="row"
             alignItems="center"
             sx={{ mb: 2 }}
-          ></Stack>
+          >
+            {device}
+          </Stack>
 
           <Divider sx={{ borderStyle: "dashed" }} />
 
           <Stack spacing={3} sx={{ my: 3 }}>
-          <Stack direction="row" justifyContent="space-between">
+            <Stack direction="row" justifyContent="space-between">
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 Applicant Name
               </Typography>
@@ -179,7 +250,7 @@ export default function BiometricControl({ applicantInfo }) {
                 />
               </div>
             </Stack>
-          <Stack direction="row" justifyContent="space-between">
+            <Stack direction="row" justifyContent="space-between">
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 File Number
               </Typography>
@@ -198,31 +269,84 @@ export default function BiometricControl({ applicantInfo }) {
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 Capture Finger
               </Typography>
-              <Autocomplete
-                multiple
-                freeSolo
-                value={[captureType[0]]}
-                onChange={(event, newValue) => {
-                  console.log(newValue);
-                }}
-                options={captureType.map((option) => option)}
-                renderTags={(value, getTagProps) =>
-                  value.map((option, index) => (
-                    <Chip
-                      key={option}
-                      size="small"
-                      label={option}
-                      {...getTagProps({ index })}
-                    />
-                  ))
-                }
-                renderInput={(params) => (
-                  <TextField label="Fingers" {...params} />
-                )}
-              />
-            </Stack>
+              <TextField
+                variant="outlined"
+                select
+                value={selectedFinger}
+                onChange={(e) => setSelectedFinger(e.target.value)}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {fingerCapture.map((finger) => (
+                  <MenuItem key={finger.value} value={finger.value}>
+                    {finger.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+              {/*<Select*/}
+              {/*    labelId="demo-simple-select-label"*/}
+              {/*    id="demo-simple-select"*/}
+              {/*    value={selectedFinger}*/}
+              {/*    label="Finger"*/}
+              {/*    onChange={(e)=> setSelectedFinger(e.target.value)}*/}
+              {/*>*/}
+              {/*  <MenuItem value="">*/}
+              {/*    <em>None</em>*/}
+              {/*  </MenuItem>*/}
+              {/*  {fingerCapture.map((finger,index)=>(*/}
+              {/*      <MenuItem key={index} value={finger} >*/}
+              {/*        {finger}*/}
+              {/*      </MenuItem>*/}
+              {/*  ))}*/}
+              {/*</Select>*/}
 
-          
+              {/*<Autocomplete*/}
+              {/*    multiple*/}
+              {/*    freeSolo*/}
+              {/*    value={captureType.slice(0, 1)}*/}
+              {/*    onChange={(event, newValue) => {*/}
+              {/*      console.log(newValue);*/}
+              {/*    }}*/}
+              {/*    options={captureType}*/}
+              {/*    renderTags={(value, getTagProps) =>*/}
+              {/*        value.map((option, index) => (*/}
+              {/*            <Chip*/}
+              {/*                key={option}*/}
+              {/*                size="small"*/}
+              {/*                label={option}*/}
+              {/*                {...getTagProps({ index })}*/}
+              {/*            />*/}
+              {/*        ))*/}
+              {/*    }*/}
+              {/*    renderInput={(params) => (*/}
+              {/*        <TextField label="Fingers" {...params} />*/}
+              {/*    )}*/}
+              {/*/>*/}
+
+              {/*<Autocomplete*/}
+              {/*  multiple*/}
+              {/*  freeSolo*/}
+              {/*  value={[captureType[0]]}*/}
+              {/*  onChange={(event, newValue) => {*/}
+              {/*    console.log(newValue);*/}
+              {/*  }}*/}
+              {/*  options={captureType.map((option) => option)}*/}
+              {/*  renderTags={(value, getTagProps) =>*/}
+              {/*    value.map((option, index) => (*/}
+              {/*      <Chip*/}
+              {/*        key={option}*/}
+              {/*        size="small"*/}
+              {/*        label={option}*/}
+              {/*        {...getTagProps({ index })}*/}
+              {/*      />*/}
+              {/*    ))*/}
+              {/*  }*/}
+              {/*  renderInput={(params) => (*/}
+              {/*    <TextField label="Fingers" {...params} />*/}
+              {/*  )}*/}
+              {/*/>*/}
+            </Stack>
           </Stack>
           <Divider sx={{ borderStyle: "dashed" }} />
 
@@ -247,6 +371,18 @@ export default function BiometricControl({ applicantInfo }) {
               Submit
             </Button>
           </Stack>
+          {/*    <table border="0" width="90%" cellspacing="0" cellpadding="3" align="center" class="txt" >*/}
+          {/*            <tr>*/}
+          {/*              <th width="33%">Left Four Fingers</th>*/}
+          {/*            <th width="33%">Two Thumbs</th>*/}
+          {/*          <th  width="33%">Right Four Fingers</th>*/}
+          {/*      </tr>*/}
+          {/*      <tr>*/}
+          {/*        <th  width="33%"><img id="img_LS" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="375" /></th>*/}
+          {/*      <th  width="33%"><img id="img_TT" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="375" /></th>*/}
+          {/*  <th  width="33%"><img id="img_RS" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="375" /></th>*/}
+          {/*</tr>*/}
+          {/*</table>*/}
         </Form>
       </FormikProvider>
     </RootStyle>

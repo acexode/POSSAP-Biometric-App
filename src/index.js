@@ -39,13 +39,11 @@ ReactDOM.render(
     <QueryClientProvider client={queryClient}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <SettingsProvider>
-
-            <BrowserRouter>
-              <AuthProvider>
-                <App />
-              </AuthProvider>
-            </BrowserRouter>
-
+          <BrowserRouter>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </BrowserRouter>
         </SettingsProvider>
       </LocalizationProvider>
     </QueryClientProvider>
