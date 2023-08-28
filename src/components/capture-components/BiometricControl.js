@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
-
+import Webcam from "react-webcam";
 import plusFill from "@iconify/icons-eva/plus-fill";
 import minusFill from "@iconify/icons-eva/minus-fill";
 import fingerPrint from "@iconify/icons-ic/baseline-fingerprint";
+import portrait from "@iconify/icons-ic/portrait";
 import { useFormik, Form, FormikProvider, useField } from "formik";
 // material
 import { styled } from "@material-ui/core/styles";
@@ -118,6 +119,7 @@ export default function BiometricControl({
   isDeviceConnected,
   device,
   Fun_LRTCapture,
+  toggleWebCam
 }) {
 
   const [selectedFinger, setSelectedFinger] = useState("");
@@ -244,68 +246,6 @@ export default function BiometricControl({
                   </MenuItem>
                 ))}
               </TextField>
-              {/*<Select*/}
-              {/*    labelId="demo-simple-select-label"*/}
-              {/*    id="demo-simple-select"*/}
-              {/*    value={selectedFinger}*/}
-              {/*    label="Finger"*/}
-              {/*    onChange={(e)=> setSelectedFinger(e.target.value)}*/}
-              {/*>*/}
-              {/*  <MenuItem value="">*/}
-              {/*    <em>None</em>*/}
-              {/*  </MenuItem>*/}
-              {/*  {fingerCapture.map((finger,index)=>(*/}
-              {/*      <MenuItem key={index} value={finger} >*/}
-              {/*        {finger}*/}
-              {/*      </MenuItem>*/}
-              {/*  ))}*/}
-              {/*</Select>*/}
-
-              {/*<Autocomplete*/}
-              {/*    multiple*/}
-              {/*    freeSolo*/}
-              {/*    value={captureType.slice(0, 1)}*/}
-              {/*    onChange={(event, newValue) => {*/}
-              {/*      console.log(newValue);*/}
-              {/*    }}*/}
-              {/*    options={captureType}*/}
-              {/*    renderTags={(value, getTagProps) =>*/}
-              {/*        value.map((option, index) => (*/}
-              {/*            <Chip*/}
-              {/*                key={option}*/}
-              {/*                size="small"*/}
-              {/*                label={option}*/}
-              {/*                {...getTagProps({ index })}*/}
-              {/*            />*/}
-              {/*        ))*/}
-              {/*    }*/}
-              {/*    renderInput={(params) => (*/}
-              {/*        <TextField label="Fingers" {...params} />*/}
-              {/*    )}*/}
-              {/*/>*/}
-
-              {/*<Autocomplete*/}
-              {/*  multiple*/}
-              {/*  freeSolo*/}
-              {/*  value={[captureType[0]]}*/}
-              {/*  onChange={(event, newValue) => {*/}
-              {/*    console.log(newValue);*/}
-              {/*  }}*/}
-              {/*  options={captureType.map((option) => option)}*/}
-              {/*  renderTags={(value, getTagProps) =>*/}
-              {/*    value.map((option, index) => (*/}
-              {/*      <Chip*/}
-              {/*        key={option}*/}
-              {/*        size="small"*/}
-              {/*        label={option}*/}
-              {/*        {...getTagProps({ index })}*/}
-              {/*      />*/}
-              {/*    ))*/}
-              {/*  }*/}
-              {/*  renderInput={(params) => (*/}
-              {/*    <TextField label="Fingers" {...params} />*/}
-              {/*  )}*/}
-              {/*/>*/}
             </Stack>
           </Stack>
           <Divider sx={{ borderStyle: "dashed" }} />
@@ -327,22 +267,23 @@ export default function BiometricControl({
             >
               Capture
             </Button>
+            <Button
+              fullWidth
+              size="large"
+              type="button"
+              color="warning"
+              variant="contained"
+              startIcon={<Icon icon={portrait} />}
+              onClick={toggleWebCam}
+              sx={{ whiteSpace: "nowrap" }}
+            >
+              Image Capture
+            </Button>
             <Button fullWidth size="large" type="submit" variant="contained">
               Submit
             </Button>
           </Stack>
-          {/*    <table border="0" width="90%" cellspacing="0" cellpadding="3" align="center" class="txt" >*/}
-          {/*            <tr>*/}
-          {/*              <th width="33%">Left Four Fingers</th>*/}
-          {/*            <th width="33%">Two Thumbs</th>*/}
-          {/*          <th  width="33%">Right Four Fingers</th>*/}
-          {/*      </tr>*/}
-          {/*      <tr>*/}
-          {/*        <th  width="33%"><img id="img_LS" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="375" /></th>*/}
-          {/*      <th  width="33%"><img id="img_TT" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="375" /></th>*/}
-          {/*  <th  width="33%"><img id="img_RS" src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="400" height="375" /></th>*/}
-          {/*</tr>*/}
-          {/*</table>*/}
+         
         </Form>
       </FormikProvider>
     </RootStyle>

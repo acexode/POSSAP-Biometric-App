@@ -90,7 +90,7 @@ function ThumbnailItem({ item }) {
   );
 }
 
-export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs,leftFourFingers,rightFourFingers}) {
+export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs,leftFourFingers,rightFourFingers, passportImage}) {
   const [openLightbox, setOpenLightbox] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -127,6 +127,12 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
             img: twoThumbs ? `data:image/${twoThumbs?.imgType};base64,${twoThumbs?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : defaultImg
 
         },
+        {
+            id:4,
+            title:"Passport Image",
+            img: passportImage ? passportImage  : defaultImg
+
+        },
 
     ]
 
@@ -148,7 +154,7 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
     focusOnSelect: true,
     variableWidth: true,
     centerPadding: '0px',
-    slidesToShow: applicantInfo.images.length > 3 ? 3 : applicantInfo.images.length
+    slidesToShow: applicantInfo.images.length > 4 ? 4 : applicantInfo.images.length
   };
 
   useEffect(() => {
@@ -239,8 +245,8 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
         }}
       >
         <Slider {...settings2} asNavFor={nav1} ref={slider2}>
-          {applicantInfo?.images?.map((item,index) => (
-            <ThumbnailItem key={index} item={item} />
+          {capturedImages?.map((item,index) => (
+            <ThumbnailItem key={index} item={item.img} />
           ))}
         </Slider>
       </Box>
