@@ -33,6 +33,7 @@ import Scrollbar from "../Scrollbar";
 import { MIconButton } from "../@material-extend";
 import useAuth from "../../hooks/useAuth";
 import Empty from "../Empty";
+import { LoadingButton } from "@material-ui/lab";
 
 // ----------------------------------------------------------------------
 
@@ -175,15 +176,17 @@ export default function ApplicantInfo({handleDeviceLoad}) {
 
     </Card>
       <Box sx={{ mt: 5, textAlign: "right" }}>
-        <Button
+        <LoadingButton
           to="#"
           size="md"
-          color="inherit"
+          type="submit" 
+          variant="contained"
           onClick={handleDeviceLoad}
           endIcon={<Icon icon={arrowIosForwardFill} />}
+          disabled={!fileResult}
         >
           Enroll
-        </Button>
+        </LoadingButton>
       </Box>
     </Box>
   );
