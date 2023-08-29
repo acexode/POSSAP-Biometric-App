@@ -9,6 +9,9 @@ import {Box, Typography} from '@material-ui/core';
 
 import LightboxModal from '../LightboxModal';
 import CarouselControlsArrowsIndex from '../CarouselControlsArrowsIndex';
+import RightDummy from "../../assets/static/home/RightFingers.png"
+import LeftDummy from "../../assets/static/home/LeftFingers.png"
+import ThumbDummy from "../../assets/static/home/TwoThumbs.png"
 
 // ----------------------------------------------------------------------
 
@@ -48,8 +51,8 @@ const ThumbWrapperStyle = styled('div')(({ theme }) => ({
 
 const LargeImgStyle = styled('img')({
   top: 0,
-  width: '100%',
-  height: '100%',
+  width: '498px',
+  height: '523px',
   objectFit: 'cover',
   position: 'absolute'
 });
@@ -69,9 +72,9 @@ LargeItem.propTypes = {
 
 function LargeItem({ item, onOpenLightbox }) {
   return (
-    <Box sx={{ cursor: 'zoom-in', paddingTop: '100%', position: 'relative' }}>
+    <Box sx={{ cursor: 'zoom-in', paddingTop: '100%', position: 'relative',display:"flex",justifyContent:"center",alignItems:"center" }}>
 
-      <LargeImgStyle width="400" height="375" id={item?.id} alt={item.img} src={item?.img} onClick={() => onOpenLightbox(item?.img)} />
+      <LargeImgStyle  id={item?.id} alt={item.img} src={item?.img} onClick={() => onOpenLightbox(item?.img)} />
 
     </Box>
   );
@@ -114,17 +117,17 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
         {
             id:1,
             title:"Left Hand",
-            img: leftFourFingers ? `data:image/${leftFourFingers?.imgType};base64,${leftFourFingers?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : defaultImg
+            img: leftFourFingers ? `data:image/${leftFourFingers?.imgType};base64,${leftFourFingers?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : LeftDummy
         },
         {
             id:2,
             title:"Right Hand",
-            img: rightFourFingers ? `data:image/${rightFourFingers?.imgType};base64,${rightFourFingers?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : defaultImg
+            img: rightFourFingers ? `data:image/${rightFourFingers?.imgType};base64,${rightFourFingers?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : RightDummy
         },
         {
             id:3,
             title:"Two Thumbs",
-            img: twoThumbs ? `data:image/${twoThumbs?.imgType};base64,${twoThumbs?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : defaultImg
+            img: twoThumbs ? `data:image/${twoThumbs?.imgType};base64,${twoThumbs?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : ThumbDummy
 
         },
         {
@@ -198,9 +201,7 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
                     </span>
                  </Typography>
                  <LargeItem key={index} item={item} onOpenLightbox={handleOpenLightbox}   />
-                 <Typography variant="h5" style={{textAlign:"center"}} paragraph>
-                     {item?.title}
-                 </Typography>
+
              </>
             ))}
 
