@@ -41,5 +41,10 @@ const setSession = (accessToken) => {
     // delete axios.defaults.headers.common.Authorization;
   }
 };
-
-export { isValidToken, setSession,  };
+const getToken = () =>{
+  const token = localStorage.getItem('accessToken');
+  if(token){
+    return token
+  }
+}
+export { isValidToken, setSession, getToken };

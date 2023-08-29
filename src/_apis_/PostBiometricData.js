@@ -7,7 +7,7 @@ import config from '../config.json';
 export const url = getUrlString(POST_BIOMETRIC_DATA);
 
 export default async function postBiometricData(data) {
-  console.log(fileNumber);
+  // console.log(fileNumber);
   const body = computeCBSBody(
     "post",
     url,

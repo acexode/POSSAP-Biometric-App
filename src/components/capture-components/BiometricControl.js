@@ -29,26 +29,28 @@ import {
 import { MIconButton } from "../@material-extend";
 import Label from "../Label";
 import Select from "../../theme/overrides/Select";
+import postBiometricData from "../../_apis_/PostBiometricData";
 
 // ----------------------------------------------------------------------
 
 const RootStyle = styled("div")(({ theme }) => ({
   padding: theme.spacing(3),
   [theme.breakpoints.up(1368)]: {
-    padding: theme.spacing(5, 8),
+    // padding: theme.spacing(5, 8),
   },
 }));
 
 const FINGERS = [" Little", " Ring", " Middle", " Index", " Thumb"];
 const fingerCapture = [
   {
-    label: "Right Hand",
-    value: "RH",
-  },
-  {
     label: "Left Hand",
     value: "LH",
   },
+  {
+    label: "Right Hand",
+    value: "RH",
+  },
+
   {
     label: "Two Thumbs",
     value: "TT",
@@ -119,30 +121,48 @@ export default function BiometricControl({
   isDeviceConnected,
   device,
   Fun_LRTCapture,
-  toggleWebCam
+  toggleWebCam,
+ fingerDataObject
 }) {
 
-  const [selectedFinger, setSelectedFinger] = useState("");
+  const [selectedFinger, setSelectedFinger] = useState(fingerCapture[0].value);
   const captureType = ["Left Hand", "Right Hand", "Two Thumb"];
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      Id: "",
       FileNumber: "PCC339393",
       ApplicantName: "Sir Abubakar",
-      LeftFourFingerPrint: "",
-      RightFourFingerPrint: "",
-      TwoThumbPrint: "",
+      Comment:""
     },
     onSubmit: async (values, { setSubmitting }) => {
+        const currentDate = new Date();
+
+  // Get the year, month, and day from the current date
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+
+  // Format the date in "YYYY-MM-DD" format
+        const formattedDate = `${year}-${month}-${day}`;
       try {
-        setSubmitting(false);
+        const newValues = {
+          ...fingerDataObject,
+          ...values,
+          RegisteredDate :formattedDate
+        }
+        delete newValues?.ApplicantName
+        console.log({newValues})
+      const res =   await postBiometricData(newValues)
+        console.log({res})
+        setSubmitting(true);
       } catch (error) {
-        setSubmitting(false);
+        console.log(error)
+       } finally {
+        setSubmitting(false)
       }
     },
   });
-  const { values, touched, errors, getFieldProps, handleSubmit } = formik;
+  const { values, touched, errors, getFieldProps, handleSubmit ,isSubmitting} = formik;
 
   const handleCapture = () => {
     console.log({ selectedFinger });
@@ -202,10 +222,11 @@ export default function BiometricControl({
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 Applicant Name
               </Typography>
-              <div>
+              <div style={{width:250}}>
                 <TextField
                   fullWidth
                   label="Applicant Name"
+                  disabled={true}
                   {...getFieldProps("ApplicantName")}
                   error={Boolean(touched.ApplicantName && errors.ApplicantName)}
                   helperText={touched.ApplicantName && errors.ApplicantName}
@@ -216,9 +237,10 @@ export default function BiometricControl({
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 File Number
               </Typography>
-              <div>
+              <div style={{width:250}}>
                 <TextField
                   fullWidth
+                  disabled={true}
                   label="File Number"
                   {...getFieldProps("FileNumber")}
                   error={Boolean(touched.FileNumber && errors.FileNumber)}
@@ -231,23 +253,45 @@ export default function BiometricControl({
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 Capture Finger
               </Typography>
-              <TextField
-                variant="outlined"
-                select
-                value={selectedFinger}
-                onChange={(e) => setSelectedFinger(e.target.value)}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {fingerCapture.map((finger) => (
-                  <MenuItem key={finger.value} value={finger.value}>
-                    {finger.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+             <div style={{width:250}}>
+               <TextField
+                   variant="outlined"
+                   select
+                   fullWidth
+                   value={selectedFinger}
+                   onChange={(e) => setSelectedFinger(e.target.value)}
+               >
+                 <MenuItem value="">
+                   <em>None</em>
+                 </MenuItem>
+                 {fingerCapture.map((finger) => (
+                     <MenuItem key={finger.value} value={finger.value}>
+                       {finger.label}
+                     </MenuItem>
+                 ))}
+               </TextField>
+             </div>
             </Stack>
+
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+                Comment
+              </Typography>
+              <div style={{width:250}}>
+                <TextField
+                    fullWidth
+                    label="Comment"
+                    multiline
+                    {...getFieldProps("Comment")}
+                    error={Boolean(touched.Comment && errors.Comment)}
+                    helperText={touched.Comment && errors.Comment}
+                />
+              </div>
+            </Stack>
+
+
           </Stack>
+
           <Divider sx={{ borderStyle: "dashed" }} />
 
           <Stack
@@ -279,11 +323,13 @@ export default function BiometricControl({
             >
               Image Capture
             </Button>
-            <Button fullWidth size="large" type="submit" variant="contained">
-              Submit
-            </Button>
+
           </Stack>
-         
+        <Stack  sx={{ mt: 2 }}>
+          <Button fullWidth size="large" disabled={isSubmitting} type="submit" variant="contained">
+            Submit
+          </Button>
+        </Stack>
         </Form>
       </FormikProvider>
     </RootStyle>

@@ -5,6 +5,7 @@ import { Box, Card, Grid, Container } from "@material-ui/core";
 import Page from "../../components/Page";
 import { CapturedDataCarousel, BiometricControl } from "../../components/capture-components";
 import PhotoCapture from '../../components/capture-components/PhotoCapture';
+import {getToken} from "../../utils/jwt";
 
 
 export default function CapturePage() {
@@ -17,7 +18,8 @@ export default function CapturePage() {
   const [twoThumbs, setTwoThumbs] = useState();
   const [passportImage, setpassportImage] = useState(null)
   const fingerRef = useRef(null);
-
+  const [fingers,setFingers] = useState([])
+  const token = getToken()
   const applicantInfo = {
     id: "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1",
      images: [
@@ -128,7 +130,7 @@ export default function CapturePage() {
 
   function Fun_LRTCapture(capType) {
     let capMode = "PLAIN";
-;
+
     Fun_Live_Preview();
     fingerRef?.current?.scrollIntoView();
     let mf_value = "";
@@ -153,7 +155,7 @@ export default function CapturePage() {
       {
         const nfid = "nid" + i;
         const imgid = "img_id" + i;
-        console.log({nfid,imgid})
+        // console.log({nfid,imgid})
       }
     }
 
@@ -177,7 +179,7 @@ export default function CapturePage() {
         if (status === 200) {
           const result = JSON.parse(xhr.responseText);
           if(result.errMsg!=="")
-            console.log(result);
+            console.log({result});
 
           const scount = result.slapCount;
           for (let i = 0; i < scount; i++) {
@@ -192,8 +194,11 @@ export default function CapturePage() {
 
 
           const fcount = result.fingerCount;
+          setFingers((prev) => [...prev,...result?.fingers])
           for (let i = 0; i < fcount; i++) {
             const fidx = result.fingers[i].fingerNo;
+            console.log(result.fingers[i])
+
             const nfid = "nid" + fidx;
             const imgid = "img_id" + fidx;
             const tempid = "ftemplate" + fidx;
@@ -210,6 +215,58 @@ export default function CapturePage() {
   const toggleWebCam = useCallback(() => {
     setshowWebCam(!showWebCam)
   })
+  const newPassport = passportImage?.replace("data:image/jpeg;base64,", "");
+  const fingerDataObject = {
+    LeftFourFingerPrint: leftFourFingers?.imgData,
+    RightFourFingerPrint:rightFourFingers?.imgData,
+    TwoThumbPrint: twoThumbs?.imgData,
+    Token:token,
+    PassportImage:newPassport
+  };
+
+  fingers?.forEach(item => {
+    let fingerName = "";
+    switch (item?.fingerNo) {
+      case 10:
+        fingerName = "LeftPinky";
+        break;
+      case 9:
+        fingerName = "LeftRing";
+        break;
+        case 8:
+        fingerName = "LeftMiddle";
+        break;
+         case 7:
+        fingerName = "LeftIndex";
+        break;
+         case 6:
+        fingerName = "LeftThumb";
+        break;
+         case 5:
+        fingerName = "RightPinky";
+        break;
+         case 4:
+        fingerName = "RightRing";
+        break;
+         case 3:
+        fingerName = "RightMiddle";
+        break;
+         case 2:
+        fingerName = "RightIndex";
+        break;
+         case 1:
+        fingerName = "RightThumb";
+        break;
+
+        // Add more cases for other finger numbers if needed
+    }
+
+    if (fingerName) {
+      fingerDataObject[fingerName] = item.imgData;
+    }
+  });
+
+  // console.log(fingerDataObject);
 
   return (
     <Page title="Capture | POSSAP Biometric">
@@ -226,7 +283,7 @@ export default function CapturePage() {
                   }
                 </Grid>
                 <Grid item xs={12} md={6} lg={5}>
-                  <BiometricControl toggleWebCam={toggleWebCam} applicantInfo={applicantInfo} device={device} Fun_LRTCapture={Fun_LRTCapture} isDeviceConnected={isDeviceConnected} />
+                  <BiometricControl fingerDataObject={fingerDataObject} toggleWebCam={toggleWebCam} applicantInfo={applicantInfo} device={device} Fun_LRTCapture={Fun_LRTCapture} isDeviceConnected={isDeviceConnected} />
                 </Grid>
               </Grid>
             </Card>
