@@ -5,6 +5,7 @@ import plusFill from "@iconify/icons-eva/plus-fill";
 import minusFill from "@iconify/icons-eva/minus-fill";
 import fingerPrint from "@iconify/icons-ic/baseline-fingerprint";
 import portrait from "@iconify/icons-ic/portrait";
+
 import { useFormik, Form, FormikProvider, useField } from "formik";
 // material
 import { styled } from "@material-ui/core/styles";
@@ -30,6 +31,9 @@ import { MIconButton } from "../@material-extend";
 import Label from "../Label";
 import Select from "../../theme/overrides/Select";
 import postBiometricData from "../../_apis_/PostBiometricData";
+import useAuth from "../../hooks/useAuth";
+import closeFill from "@iconify/icons-eva/close-fill";
+import {useSnackbar} from "notistack5";
 
 // ----------------------------------------------------------------------
 
@@ -127,11 +131,13 @@ export default function BiometricControl({
 
   const [selectedFinger, setSelectedFinger] = useState(fingerCapture[0].value);
   const captureType = ["Left Hand", "Right Hand", "Two Thumb"];
+  const { fileResult } = useAuth();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      FileNumber: "PCC339393",
-      ApplicantName: "Sir Abubakar",
+      FileNumber: fileResult?.RefNumber,
+      ApplicantName: fileResult?.CustomerName,
       Comment:""
     },
     onSubmit: async (values, { setSubmitting }) => {
@@ -154,9 +160,24 @@ export default function BiometricControl({
         console.log({newValues})
       const res =   await postBiometricData(newValues)
         console.log({res})
+        enqueueSnackbar('Success', {
+          variant: 'success',
+          action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+          )
+        });
         setSubmitting(true);
       } catch (error) {
-        console.log(error)
+        enqueueSnackbar(error?.response?.data?.message, {
+          variant: 'error',
+          action: (key) => (
+              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                <Icon icon={closeFill} />
+              </MIconButton>
+          )
+        });
        } finally {
         setSubmitting(false)
       }
