@@ -47,4 +47,11 @@ const getToken = () =>{
     return token
   }
 }
-export { isValidToken, setSession, getToken };
+const getOfficerToken = () =>{
+  const user = localStorage.getItem('possap-user');
+  if(user){
+    const parsed = JSON.parse(user)
+    return parsed.token
+  }
+}
+export { isValidToken, setSession, getToken, getOfficerToken };

@@ -33,7 +33,7 @@ import Select from "../../theme/overrides/Select";
 import postBiometricData from "../../_apis_/PostBiometricData";
 import useAuth from "../../hooks/useAuth";
 import closeFill from "@iconify/icons-eva/close-fill";
-import {useSnackbar} from "notistack5";
+import { useSnackbar } from "notistack5";
 
 // ----------------------------------------------------------------------
 
@@ -126,9 +126,8 @@ export default function BiometricControl({
   device,
   Fun_LRTCapture,
   toggleWebCam,
- fingerDataObject
+  fingerDataObject,
 }) {
-
   const [selectedFinger, setSelectedFinger] = useState(fingerCapture[0].value);
   const captureType = ["Left Hand", "Right Hand", "Two Thumb"];
   const { fileResult } = useAuth();
@@ -138,52 +137,53 @@ export default function BiometricControl({
     initialValues: {
       FileNumber: fileResult?.RefNumber,
       ApplicantName: fileResult?.CustomerName,
-      Comment:""
+      Comment: "",
     },
     onSubmit: async (values, { setSubmitting }) => {
-        const currentDate = new Date();
+      const currentDate = new Date();
 
-  // Get the year, month, and day from the current date
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        const day = String(currentDate.getDate()).padStart(2, '0');
+      // Get the year, month, and day from the current date
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+      const day = String(currentDate.getDate()).padStart(2, "0");
 
-  // Format the date in "YYYY-MM-DD" format
-        const formattedDate = `${year}-${month}-${day}`;
+      // Format the date in "YYYY-MM-DD" format
+      const formattedDate = `${year}-${month}-${day}`;
       try {
         const newValues = {
           ...fingerDataObject,
           ...values,
-          RegisteredDate :formattedDate
-        }
-        delete newValues?.ApplicantName
-        console.log({newValues})
-      const res =   await postBiometricData(newValues)
-        console.log({res})
-        enqueueSnackbar('Success', {
-          variant: 'success',
+          RegisteredDate: formattedDate,
+        };
+        delete newValues?.ApplicantName;
+        console.log(newValues);
+        const res = await postBiometricData(newValues);
+        console.log({ res });
+        enqueueSnackbar("Success", {
+          variant: "success",
           action: (key) => (
-              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-                <Icon icon={closeFill} />
-              </MIconButton>
-          )
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          ),
         });
         setSubmitting(true);
       } catch (error) {
         enqueueSnackbar(error?.response?.data?.message, {
-          variant: 'error',
+          variant: "error",
           action: (key) => (
-              <MIconButton size="small" onClick={() => closeSnackbar(key)}>
-                <Icon icon={closeFill} />
-              </MIconButton>
-          )
+            <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+              <Icon icon={closeFill} />
+            </MIconButton>
+          ),
         });
-       } finally {
-        setSubmitting(false)
+      } finally {
+        setSubmitting(false);
       }
     },
   });
-  const { values, touched, errors, getFieldProps, handleSubmit ,isSubmitting} = formik;
+  const { values, touched, errors, getFieldProps, handleSubmit, isSubmitting } =
+    formik;
 
   const handleCapture = () => {
     console.log({ selectedFinger });
@@ -243,7 +243,7 @@ export default function BiometricControl({
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 Applicant Name
               </Typography>
-              <div style={{width:250}}>
+              <div style={{ width: 250 }}>
                 <TextField
                   fullWidth
                   label="Applicant Name"
@@ -258,7 +258,7 @@ export default function BiometricControl({
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 File Number
               </Typography>
-              <div style={{width:250}}>
+              <div style={{ width: 250 }}>
                 <TextField
                   fullWidth
                   disabled={true}
@@ -274,43 +274,41 @@ export default function BiometricControl({
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 Capture Finger
               </Typography>
-             <div style={{width:250}}>
-               <TextField
-                   variant="outlined"
-                   select
-                   fullWidth
-                   value={selectedFinger}
-                   onChange={(e) => setSelectedFinger(e.target.value)}
-               >
-                 <MenuItem value="">
-                   <em>None</em>
-                 </MenuItem>
-                 {fingerCapture.map((finger) => (
-                     <MenuItem key={finger.value} value={finger.value}>
-                       {finger.label}
-                     </MenuItem>
-                 ))}
-               </TextField>
-             </div>
+              <div style={{ width: 250 }}>
+                <TextField
+                  variant="outlined"
+                  select
+                  fullWidth
+                  value={selectedFinger}
+                  onChange={(e) => setSelectedFinger(e.target.value)}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {fingerCapture.map((finger) => (
+                    <MenuItem key={finger.value} value={finger.value}>
+                      {finger.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </div>
             </Stack>
 
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 Comment
               </Typography>
-              <div style={{width:250}}>
+              <div style={{ width: 250 }}>
                 <TextField
-                    fullWidth
-                    label="Comment"
-                    multiline
-                    {...getFieldProps("Comment")}
-                    error={Boolean(touched.Comment && errors.Comment)}
-                    helperText={touched.Comment && errors.Comment}
+                  fullWidth
+                  label="Comment"
+                  multiline
+                  {...getFieldProps("Comment")}
+                  error={Boolean(touched.Comment && errors.Comment)}
+                  helperText={touched.Comment && errors.Comment}
                 />
               </div>
             </Stack>
-
-
           </Stack>
 
           <Divider sx={{ borderStyle: "dashed" }} />
@@ -344,13 +342,18 @@ export default function BiometricControl({
             >
               Image Capture
             </Button>
-
           </Stack>
-        <Stack  sx={{ mt: 2 }}>
-          <Button fullWidth size="large" disabled={isSubmitting} type="submit" variant="contained">
-            Submit
-          </Button>
-        </Stack>
+          <Stack sx={{ mt: 2 }}>
+            <Button
+              fullWidth
+              size="large"
+              disabled={isSubmitting}
+              type="submit"
+              variant="contained"
+            >
+              Submit
+            </Button>
+          </Stack>
         </Form>
       </FormikProvider>
     </RootStyle>

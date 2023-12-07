@@ -5,7 +5,7 @@ import { Box, Card, Grid, Container } from "@material-ui/core";
 import Page from "../../components/Page";
 import { CapturedDataCarousel, BiometricControl } from "../../components/capture-components";
 import PhotoCapture from '../../components/capture-components/PhotoCapture';
-import {getToken} from "../../utils/jwt";
+import {getOfficerToken} from "../../utils/jwt";
 
 
 export default function CapturePage() {
@@ -19,7 +19,7 @@ export default function CapturePage() {
   const [passportImage, setpassportImage] = useState(null)
   const fingerRef = useRef(null);
   const [fingers,setFingers] = useState([])
-  const token = getToken()
+  const token = getOfficerToken()
   const applicantInfo = {
     id: "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1",
      images: [

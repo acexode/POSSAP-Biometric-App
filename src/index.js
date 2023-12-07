@@ -6,9 +6,8 @@ import "simplebar/src/simplebar.css";
 // lightbox
 import "react-image-lightbox/style.css";
 
-// editor
-import "react-quill/dist/quill.snow.css";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
+
 
 // slick-carousel
 import "slick-carousel/slick/slick.css";

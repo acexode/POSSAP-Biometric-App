@@ -1,6 +1,5 @@
 import { Icon } from "@iconify/react";
 import React, { useRef, useState } from "react";
-import { sentenceCase } from "change-case";
 import { Link as RouterLink } from "react-router-dom";
 import shareFill from "@iconify/icons-eva/share-fill";
 import printerFill from "@iconify/icons-eva/printer-fill";
