@@ -1,16 +1,21 @@
 import axios from "axios";
 import getUrlString from "../utils/get-url-string";
 import { computeCBSBody } from "../utils/computeBody";
-import { POST_BIOMETRIC_DATA } from "../constants/api-routes";
+import { POST_BIOMETRIC_DATA, POST_TINT_PERMIT_BIOMETRIC_DATA } from "../constants/api-routes";
 import config from '../config.json';
 
 export const url = getUrlString(POST_BIOMETRIC_DATA);
+export const tintUrl = getUrlString(POST_TINT_PERMIT_BIOMETRIC_DATA);
+
+
+
 
 export default async function postBiometricData(data) {
   console.log(data);
+  const finalUrl = data.FileNumber.includes("TGP")? tintUrl: url;
   const body = computeCBSBody(
     "post",
-    url,
+    finalUrl,
     {},
     "",
     "",
