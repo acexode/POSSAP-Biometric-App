@@ -58,6 +58,7 @@ AuthProvider.propTypes = {
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [fileResult, setFileResult] = useState();
+  const [fileNumber, setfileNumber] = useState(null)
   const initialize = async () => {
     try {
       const accessToken = window.localStorage.getItem('accessToken');
@@ -151,6 +152,7 @@ function AuthProvider({ children }) {
   const findFile = async (fileNumber) => {
     const response = await fetchFile(fileNumber);
     setFileResult(response.data.data.ResponseObject)
+    setfileNumber(fileNumber)
     console.log(response.data.data.ResponseObject)
   }
 
@@ -163,7 +165,8 @@ function AuthProvider({ children }) {
         login,
         logout,
         findFile,
-        fileResult
+        fileResult,
+        fileNumber
       }}
     >
       {children}

@@ -34,6 +34,7 @@ import postBiometricData from "../../_apis_/PostBiometricData";
 import useAuth from "../../hooks/useAuth";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { useSnackbar } from "notistack5";
+// import { sampleData } from "../../_apis_/sampledata";
 
 // ----------------------------------------------------------------------
 
@@ -131,6 +132,18 @@ export default function BiometricControl({
   const [selectedFinger, setSelectedFinger] = useState(fingerCapture[0].value);
   const captureType = ["Left Hand", "Right Hand", "Two Thumb"];
   const { fileResult } = useAuth();
+  // useEffect(() => {
+  //   const postSampleData = async () => {
+  //     try {
+  //       const res = await postBiometricData(sampleData);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+
+  //   }
+  //   postSampleData()
+  // }, [])
+  
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const formik = useFormik({
     enableReinitialize: true,
