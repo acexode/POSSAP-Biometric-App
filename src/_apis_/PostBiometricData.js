@@ -11,9 +11,9 @@ export const tintUrl = getUrlString(POST_TINT_PERMIT_BIOMETRIC_DATA);
 
 const  getFinalPath = (data, type) => {
   if(type === 'TGP'){
-    return data.isAmputee  ? tintUrl : tintUrl442
+    return data.IsAmputee  ? tintUrl : tintUrl442
   }else{
-    return data.isAmputee  ? pccurl : pccurl442
+    return data.IsAmputee  ? pccurl : pccurl442
   }
 }
 
