@@ -58,6 +58,7 @@
     "date-fns": "^2.30.0",
     "electron": "25.4.0",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-prebuilt-compile": "^1.7.9",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "history": "^5.0.1",

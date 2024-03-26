@@ -1,33 +1,71 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Card, Grid, Container } from "@material-ui/core";
 
 // components
 import Page from "../../components/Page";
-import { CapturedDataCarousel, BiometricControl } from "../../components/capture-components";
-import PhotoCapture from '../../components/capture-components/PhotoCapture';
-import {getOfficerToken} from "../../utils/jwt";
-
+import {
+  CapturedDataCarousel,
+  BiometricControl,
+} from "../../components/capture-components";
+import PhotoCapture from "../../components/capture-components/PhotoCapture";
+import { getOfficerToken } from "../../utils/jwt";
+import { dataURLtoFile } from "../../utils/img-formatter";
+import { MissingFinger } from "../../assets/missingFingers";
+import { remainFingers } from "../../constants/index";
+import fingerSVG from "../../assets/finger.svg";
+import { singleFingersCapture } from "../../components/capture-components/BiometricControl";
 
 export default function CapturePage() {
-  const [device,setDevice] = useState("")
+  const [device, setDevice] = useState("");
   const [showWebCam, setshowWebCam] = useState(false);
-  const [isDeviceConnected,setIsDeviceConnected] = useState(false)
+  const [isDeviceConnected, setIsDeviceConnected] = useState(false);
   const [previewImg, setPreviewImg] = useState();
   const [rightFourFingers, setRightFourFingers] = useState();
   const [leftFourFingers, setLeftFourFingers] = useState();
   const [twoThumbs, setTwoThumbs] = useState();
-  const [passportImage, setpassportImage] = useState(null)
+  const [passportImage, setpassportImage] = useState(null);
   const fingerRef = useRef(null);
-  const [fingers,setFingers] = useState([])
-  const token = getOfficerToken()
+  const [fingers, setFingers] = useState([]);
+  const [isAmputeeChecked, setIsAmputeeChecked] = useState(false);
+  const [defaultCaptured, setDefaultCaputed] = useState([
+    {
+      id: 1, // Assuming the IDs start from 1
+      title: "Right Index",
+      img: previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 2, // Assuming the IDs start from 1
+      title: "Left Index",
+      img: previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 3, // Assuming the IDs start from 1
+      title: "Left Middle",
+      img: previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 4, // Assuming the IDs start from 1
+      title: "Right Middle",
+      img: previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+  ]);
+  const token = getOfficerToken();
   const applicantInfo = {
     id: "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1",
-     images: [
+    images: [
       "https://previews.123rf.com/images/rclassenlayouts/rclassenlayouts1201/rclassenlayouts120100408/18834360-animal-paw-pet-wolf-paw-paw-bear-footprint-animal-paw-cat-paw-fingerprint-impression.jpg",
       "https://previews.123rf.com/images/rclassenlayouts/rclassenlayouts1201/rclassenlayouts120100408/18834360-animal-paw-pet-wolf-paw-paw-bear-footprint-animal-paw-cat-paw-fingerprint-impression.jpg",
       "https://previews.123rf.com/images/rclassenlayouts/rclassenlayouts1201/rclassenlayouts120100408/18834360-animal-paw-pet-wolf-paw-paw-bear-footprint-animal-paw-cat-paw-fingerprint-impression.jpg",
       "https://images.pexels.com/photos/1774986/pexels-photo-1774986.jpeg?auto=compress&cs=tinysrgb&w=600",
-     ],
+    ],
 
     colors: [
       "#00AB55",
@@ -41,82 +79,72 @@ export default function CapturePage() {
     ],
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     function Fun_DeviceInfo() {
-
       const url = "http://127.0.0.1:11121/rswas/DeviceInfo";
       let xhr;
       const ua = window.navigator.userAgent;
       const msie = ua.indexOf("MSIE ");
-      if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer, return version number
-      {
+      if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        // If Internet Explorer, return version number
         xhr = new XMLHttpRequest();
       } else {
         xhr = new XMLHttpRequest();
       }
-      xhr.open('GET', url, true);
+      xhr.open("GET", url, true);
       xhr.onreadystatechange = function () {
-
         if (xhr.readyState === 4) {
           const status = xhr.status;
 
           if (status === 200) {
             const result = JSON.parse(xhr.responseText);
             console.log(result);
-            setIsDeviceConnected(result.isConnected)
+            setIsDeviceConnected(result.isConnected);
             if (result.isConnected) {
-              setDevice(result?.model)
-              console.log("Scanner is Connected..!")
+              setDevice(result?.model);
+              console.log("Scanner is Connected..!");
+            } else {
+              console.log("Scanner is not Connected..!");
             }
-            else {
-              console.log("Scanner is not Connected..!")
-            }
-          }
-          else {
+          } else {
             console.log("Device Info : Suprema Service is not Running");
-
           }
         }
       };
       xhr.send();
     }
-    Fun_DeviceInfo()
-  },[])
+    Fun_DeviceInfo();
+  }, []);
 
   function Fun_CanvasInfo() {
     const url = "http://127.0.0.1:11121/rswas/CanvasInfo";
     let xhr;
     const ua = window.navigator.userAgent;
     const msie = ua.indexOf("MSIE ");
-    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer, return version number
-    {
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+      // If Internet Explorer, return version number
       xhr = new XMLHttpRequest();
     } else {
       xhr = new XMLHttpRequest();
     }
-    xhr.open('GET', url, true);
+    xhr.open("GET", url, true);
     xhr.onreadystatechange = function () {
-
       if (xhr.readyState === 4) {
         const status = xhr.status;
 
         if (status === 200) {
           const result = JSON.parse(xhr.responseText);
 
-          if(result.imgData!=="")
-          {
+          if (result.imgData !== "") {
             setPreviewImg(result);
 
             // document.getElementById('img_id').setAttribute('src', "data:image/png;base64,"+result.imgData);
-          }
-          else
-          {
+          } else {
             setPreviewImg(undefined);
 
             // document.getElementById('img_id').setAttribute('src', "data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==");
           }
-        }
-        else {
+        } else {
           console.log("Fun_CanvasInfo:Suprema Service is not Ruuning");
           // document.getElementById("dstatus").value="";
         }
@@ -129,7 +157,7 @@ export default function CapturePage() {
   }
 
   function Fun_LRTCapture(capType) {
-    let capMode = "PLAIN";
+    let capMode = "ROLLED";
 
     Fun_Live_Preview();
     fingerRef?.current?.scrollIntoView();
@@ -137,22 +165,19 @@ export default function CapturePage() {
 
     const isNewSession_value = "Yes";
 
-
     const data = JSON.stringify({
-      "captureMode": capMode,
-      "captureType": capType,
-      "missingFingers": mf_value,
-      "imageFormat": "JPEG",
-      "isoFMRFormat": "FMR2011",
-      "isoFIRFormat": "FIR2011",
-      "isNewSession": "Yes"
+      captureMode: capMode,
+      captureType: capType,
+      missingFingers: mf_value,
+      imageFormat: "JPEG",
+      isoFMRFormat: "FMR2011",
+      isoFIRFormat: "FIR2011",
+      isNewSession: "Yes",
     });
     console.log(data);
 
-    if(isNewSession_value==="Yes")
-    {
-      for (let i = 1; i < 11; i++)
-      {
+    if (isNewSession_value === "Yes") {
+      for (let i = 1; i < 11; i++) {
         const nfid = "nid" + i;
         const imgid = "img_id" + i;
         // console.log({nfid,imgid})
@@ -163,8 +188,8 @@ export default function CapturePage() {
     const url = "http://127.0.0.1:11121/rswas/Capture";
     const ua = window.navigator.userAgent;
     const msie = ua.indexOf("MSIE ");
-    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer, return version number
-    {
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+      // If Internet Explorer, return version number
       //IE browser
       //xhr = new ActiveXObject("Microsoft.XMLHTTP");
       xhr = new XMLHttpRequest();
@@ -172,59 +197,56 @@ export default function CapturePage() {
       //other browser
       xhr = new XMLHttpRequest();
     }
-    xhr.open('POST', url, true);
+    xhr.open("POST", url, true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         const status = xhr.status;
         if (status === 200) {
           const result = JSON.parse(xhr.responseText);
-          if(result.errMsg!=="")
-            console.log({result});
+          if (result.errMsg !== "") console.log({ result });
 
           const scount = result.slapCount;
           for (let i = 0; i < scount; i++) {
             const stype = result.slaps[i].slapType;
-            if(stype==="Left_Slap")
-              setLeftFourFingers(result.slaps[i]);
-            if(stype==="Two_Thumbs")
-              setTwoThumbs(result.slaps[i]);
-            if(stype==="Right_Slap")
-              setRightFourFingers(result.slaps[i]);
+            if (stype === "Left_Slap") setLeftFourFingers(result.slaps[i]);
+            if (stype === "Two_Thumbs") setTwoThumbs(result.slaps[i]);
+            if (stype === "Right_Slap") setRightFourFingers(result.slaps[i]);
           }
 
-
           const fcount = result.fingerCount;
-          setFingers((prev) => [...prev,...result?.fingers])
+          if (result?.slaps.length === 0) {
+            setFingers((prev) => [...prev, ...result?.fingers]);
+          }
           for (let i = 0; i < fcount; i++) {
             const fidx = result.fingers[i].fingerNo;
-            console.log(result.fingers[i])
+            console.log(result.fingers[i]);
 
             const nfid = "nid" + fidx;
             const imgid = "img_id" + fidx;
             const tempid = "ftemplate" + fidx;
-
           }
-        }
-        else {
-          console.log("Capture : Suprema RealScan Web Agent Service is not Ruuning");
+        } else {
+          console.log(
+            "Capture : Suprema RealScan Web Agent Service is not Ruuning"
+          );
         }
       }
     };
     xhr.send(data);
   }
   const toggleWebCam = useCallback(() => {
-    setshowWebCam(!showWebCam)
-  })
+    setshowWebCam(!showWebCam);
+  });
   const newPassport = passportImage?.replace("data:image/jpeg;base64,", "");
   const fingerDataObject = {
-    LeftFourFingerPrint: leftFourFingers?.imgData,
-    RightFourFingerPrint:rightFourFingers?.imgData,
-    TwoThumbPrint: twoThumbs?.imgData,
-    Token:token,
-    PassportImage:newPassport
+    LeftFourFingerPrint: leftFourFingers?.imgData ?? MissingFinger,
+    RightFourFingerPrint: rightFourFingers?.imgData ?? MissingFinger,
+    TwoThumbPrint: twoThumbs?.imgData ?? MissingFinger,
+    Token: token,
+    PassportImage: newPassport,
   };
-
-  fingers?.forEach(item => {
+  const fingerImgObject = {};
+  fingers?.forEach((item) => {
     let fingerName = "";
     switch (item?.fingerNo) {
       case 10:
@@ -233,57 +255,116 @@ export default function CapturePage() {
       case 9:
         fingerName = "LeftRing";
         break;
-        case 8:
+      case 8:
         fingerName = "LeftMiddle";
         break;
-         case 7:
+      case 7:
         fingerName = "LeftIndex";
         break;
-         case 6:
+      case 6:
         fingerName = "LeftThumb";
         break;
-         case 5:
+      case 5:
         fingerName = "RightPinky";
         break;
-         case 4:
+      case 4:
         fingerName = "RightRing";
         break;
-         case 3:
+      case 3:
         fingerName = "RightMiddle";
         break;
-         case 2:
+      case 2:
         fingerName = "RightIndex";
         break;
-         case 1:
+      case 1:
         fingerName = "RightThumb";
         break;
 
-        // Add more cases for other finger numbers if needed
+      // Add more cases for other finger numbers if needed
     }
-
     if (fingerName) {
-      fingerDataObject[fingerName] = item.imgData;
+      fingerDataObject[
+        fingerName
+      ] = `data:image/${item?.imgType?.toLowerCase()};base64,${item.imgData}`;
+
+      fingerImgObject[fingerName] = dataURLtoFile(
+        `data:image/${item?.imgType?.toLowerCase()};base64,${item.imgData}`,
+        `${fingerName}.jpeg`
+      );
     }
   });
 
-  // console.log(fingerDataObject);
+  remainFingers.forEach((item) => {
+    if (fingerDataObject[item]) {
+      return;
+    } else {
+      fingerDataObject[item] = MissingFinger;
+    }
+  });
+
+  useEffect(() => {
+    if (fingers?.length > 0) {
+      const newArray = singleFingersCapture
+        ?.map((item, index) => {
+          const matchingFinger = fingers?.find(
+            (finger) => finger.fingerNo.toString() === item.value
+          );
+          if (matchingFinger) {
+            return {
+              id: matchingFinger.fingerNo,
+              title: item.label,
+              img: matchingFinger?.imgData
+                ? `data:image/${matchingFinger?.imgType};base64,${matchingFinger?.imgData}`
+                : previewImg
+                ? `data:image/png;base64,${previewImg.imgData}`
+                : fingerSVG,
+            };
+          } else {
+            return null; // or handle the case when no matching finger is found
+          }
+        })
+        .filter((a) => a !== null);
+
+      setDefaultCaputed(newArray);
+    }
+  }, [fingers?.length]);
 
   return (
     <Page title="Capture | POSSAP Biometric">
       <Container maxWidth="lg">
         {applicantInfo && (
-          <Box sx={{mt: 5, pt:2}} >
-            <Card sx={{mt: 2}} >
+          <Box sx={{ mt: 5, pt: 2 }}>
+            <Card sx={{ mt: 2 }}>
               <Grid container>
                 <Grid item xs={12} md={6} lg={7}>
-                  {
-                    !showWebCam ?
-                    <CapturedDataCarousel previewImg={previewImg} twoThumbs={twoThumbs} leftFourFingers={leftFourFingers} rightFourFingers={rightFourFingers} applicantInfo={applicantInfo} passportImage={passportImage} />
-                    : <PhotoCapture setshowWebCam={setshowWebCam} setpassportImage={setpassportImage} />
-                  }
+                  {!showWebCam ? (
+                    <CapturedDataCarousel
+                      previewImg={previewImg}
+                      twoThumbs={twoThumbs}
+                      leftFourFingers={leftFourFingers}
+                      rightFourFingers={rightFourFingers}
+                      applicantInfo={applicantInfo}
+                      passportImage={passportImage}
+                      capturedFingers={defaultCaptured}
+                      isAmputeeChecked={isAmputeeChecked}
+                    />
+                  ) : (
+                    <PhotoCapture
+                      setshowWebCam={setshowWebCam}
+                      setpassportImage={setpassportImage}
+                    />
+                  )}
                 </Grid>
                 <Grid item xs={12} md={6} lg={5}>
-                  <BiometricControl fingerDataObject={fingerDataObject} toggleWebCam={toggleWebCam} applicantInfo={applicantInfo} device={device} Fun_LRTCapture={Fun_LRTCapture} isDeviceConnected={isDeviceConnected} />
+                  <BiometricControl
+                    fingerDataObject={fingerDataObject}
+                    toggleWebCam={toggleWebCam}
+                    applicantInfo={applicantInfo}
+                    device={device}
+                    Fun_LRTCapture={Fun_LRTCapture}
+                    isDeviceConnected={isDeviceConnected}
+                    setIsAmputeeChecked={setIsAmputeeChecked}
+                  />
                 </Grid>
               </Grid>
             </Card>
