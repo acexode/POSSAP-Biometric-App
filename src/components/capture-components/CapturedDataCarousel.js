@@ -59,7 +59,7 @@ const LargeImgStyle = styled("img")({
 
 const ThumbImgStyle = styled("img")({
   width: "100%",
-  height: "100%",
+  height: "80%",
   objectFit: "cover",
 });
 
@@ -97,11 +97,12 @@ ThumbnailItem.propTypes = {
   item: PropTypes.string,
 };
 
-function ThumbnailItem({ item }) {
+function ThumbnailItem({ item, title }) {
   return (
     <ThumbWrapperStyle>
       <Box className="isActive" />
       <ThumbImgStyle alt="thumb image" src={item} />
+      {title && <h3 style={{ fontSize: 7, textAlign: "center" }}>{title}</h3>}
     </ThumbWrapperStyle>
   );
 }
@@ -123,6 +124,7 @@ export default function CapturedDataCarousel({
   const [nav2, setNav2] = useState(null);
   const slider1 = useRef(null);
   const slider2 = useRef(null);
+
   const capturedImages = [
     {
       id: 1,
@@ -172,7 +174,7 @@ export default function CapturedDataCarousel({
     } else {
       setDefaultImages(capturedImages);
     }
-  }, [isAmputeeChecked, capturedFingers]);
+  }, [isAmputeeChecked, capturedFingers, previewImg]);
 
   const settings1 = {
     dots: false,
@@ -291,7 +293,11 @@ export default function CapturedDataCarousel({
       >
         <Slider {...settings2} asNavFor={nav1} ref={slider2}>
           {defaultImages?.map((item, index) => (
-            <ThumbnailItem key={index} item={item.img} />
+            <ThumbnailItem
+              key={index}
+              item={item.img}
+              title={isAmputeeChecked ? item.title : ""}
+            />
           ))}
         </Slider>
       </Box>

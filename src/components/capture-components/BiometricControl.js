@@ -184,6 +184,7 @@ export default function BiometricControl({
   toggleWebCam,
   fingerDataObject,
   setIsAmputeeChecked,
+  setMissingFingersToRemove,
 }) {
   const [selectedFinger, setSelectedFinger] = useState(fingerCapture[0].value);
   const [isAmputee, setIsAmputte] = useState(false);
@@ -207,6 +208,7 @@ export default function BiometricControl({
       const filteredFingersCapture = singleFingersCapture.filter(
         (finger) => !missingFingers.includes(finger.label)
       );
+      setMissingFingersToRemove(filteredFingersCapture);
       setFingerArray(filteredFingersCapture);
     } else {
       setFingerArray(fingerCapture);

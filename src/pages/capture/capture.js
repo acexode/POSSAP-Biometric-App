@@ -13,7 +13,6 @@ import { dataURLtoFile } from "../../utils/img-formatter";
 import { MissingFinger } from "../../assets/missingFingers";
 import { remainFingers } from "../../constants/index";
 import fingerSVG from "../../assets/finger.svg";
-import { singleFingersCapture } from "../../components/capture-components/BiometricControl";
 
 export default function CapturePage() {
   const [device, setDevice] = useState("");
@@ -26,37 +25,51 @@ export default function CapturePage() {
   const [passportImage, setpassportImage] = useState(null);
   const fingerRef = useRef(null);
   const [fingers, setFingers] = useState([]);
+  const [missingFingers, setMissingFingers] = useState([]);
+  const [fingerss, setFingerss] = useState({
+    1: {
+      imgData: null,
+      imgType: null,
+    },
+    2: {
+      imgData: null,
+      imgType: null,
+    },
+    3: {
+      imgData: null,
+      imgType: null,
+    },
+    4: {
+      imgData: null,
+      imgType: null,
+    },
+    5: {
+      imgData: null,
+      imgType: null,
+    },
+    6: {
+      imgData: null,
+      imgType: null,
+    },
+    7: {
+      imgData: null,
+      imgType: null,
+    },
+    8: {
+      imgData: null,
+      imgType: null,
+    },
+    9: {
+      imgData: null,
+      imgType: null,
+    },
+    10: {
+      imgData: null,
+      imgType: null,
+    },
+  });
   const [isAmputeeChecked, setIsAmputeeChecked] = useState(false);
-  const [defaultCaptured, setDefaultCaputed] = useState([
-    {
-      id: 1, // Assuming the IDs start from 1
-      title: "Right Index",
-      img: previewImg
-        ? `data:image/png;base64,${previewImg.imgData}`
-        : fingerSVG,
-    },
-    {
-      id: 2, // Assuming the IDs start from 1
-      title: "Left Index",
-      img: previewImg
-        ? `data:image/png;base64,${previewImg.imgData}`
-        : fingerSVG,
-    },
-    {
-      id: 3, // Assuming the IDs start from 1
-      title: "Left Middle",
-      img: previewImg
-        ? `data:image/png;base64,${previewImg.imgData}`
-        : fingerSVG,
-    },
-    {
-      id: 4, // Assuming the IDs start from 1
-      title: "Right Middle",
-      img: previewImg
-        ? `data:image/png;base64,${previewImg.imgData}`
-        : fingerSVG,
-    },
-  ]);
+
   const token = getOfficerToken();
   const applicantInfo = {
     id: "e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1",
@@ -220,10 +233,16 @@ export default function CapturePage() {
           for (let i = 0; i < fcount; i++) {
             const fidx = result.fingers[i].fingerNo;
             console.log(result.fingers[i]);
-
-            const nfid = "nid" + fidx;
-            const imgid = "img_id" + fidx;
-            const tempid = "ftemplate" + fidx;
+            if (fingerss[result.fingers[i].fingerNo]) {
+              setFingerss((prevState) => ({
+                ...prevState,
+                [result.fingers[i].fingerNo]: {
+                  ...prevState[result.fingers[i].fingerNo],
+                  imgData: result.fingers[i].imgData,
+                  imgType: result.fingers[i].imgType,
+                },
+              }));
+            }
           }
         } else {
           console.log(
@@ -302,32 +321,101 @@ export default function CapturePage() {
     }
   });
 
-  useEffect(() => {
-    if (fingers?.length > 0) {
-      const newArray = singleFingersCapture
-        ?.map((item, index) => {
-          const matchingFinger = fingers?.find(
-            (finger) => finger.fingerNo.toString() === item.value
-          );
-          if (matchingFinger) {
-            return {
-              id: matchingFinger.fingerNo,
-              title: item.label,
-              img: matchingFinger?.imgData
-                ? `data:image/${matchingFinger?.imgType};base64,${matchingFinger?.imgData}`
-                : previewImg
-                ? `data:image/png;base64,${previewImg.imgData}`
-                : fingerSVG,
-            };
-          } else {
-            return null; // or handle the case when no matching finger is found
-          }
-        })
-        .filter((a) => a !== null);
-
-      setDefaultCaputed(newArray);
-    }
-  }, [fingers?.length]);
+  const defaultCaptured = [
+    {
+      id: 1, // Assuming the IDs start from 1
+      title: "Right Thumb",
+      img: fingerss[1].imgData
+        ? `data:image/${fingerss[1]?.imgType};base64,${fingerss[1]?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 2, // Assuming the IDs start from 1
+      title: "Right Index",
+      img: fingerss[2].imgData
+        ? `data:image/${fingerss[2]?.imgType};base64,${fingerss[2]?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 3, // Assuming the IDs start from 1
+      title: "Right Middle",
+      img: fingerss[3].imgData
+        ? `data:image/${fingerss[3]?.imgType};base64,${fingerss[3]?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 4, // Assuming the IDs start from 1
+      title: "Right Ring",
+      img: fingerss[4].imgData
+        ? `data:image/${fingerss[4]?.imgType};base64,${fingerss[4]?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 5, // Assuming the IDs start from 1
+      title: "Right Pinky",
+      img: fingerss[5].imgData
+        ? `data:image/${fingerss[5]?.imgType};base64,${fingerss[5]?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 6, // Assuming the IDs start from 1
+      title: "Left Thumb",
+      img: fingerss[6].imgData
+        ? `data:image/${fingerss[6]?.imgType};base64,${fingerss[6]?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 7, // Assuming the IDs start from 1
+      title: "Left Index",
+      img: fingerss[7].imgData
+        ? `data:image/${fingerss[7]?.imgType};base64,${fingerss[7]?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 8, // Assuming the IDs start from 1
+      title: "Left Middle",
+      img: fingerss[8].imgData
+        ? `data:image/${fingerss[8]?.imgType};base64,${fingerss[8]?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 9, // Assuming the IDs start from 1
+      title: "Left Ring",
+      img: fingerss[9].imgData
+        ? `data:image/${fingerss[9]?.imgType};base64,${fingerss[9]?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+    {
+      id: 10, // Assuming the IDs start from 1
+      title: "Left Pinky",
+      img: fingerss[10].imgData
+        ? `data:image/${fingerss[10]?.imgType};base64,${fingerss[10]?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : fingerSVG,
+    },
+  ];
+  const filteredCaptured = defaultCaptured.filter((finger) =>
+    missingFingers.some((data) => data.value === String(finger.id))
+  );
 
   return (
     <Page title="Capture | POSSAP Biometric">
@@ -345,7 +433,7 @@ export default function CapturePage() {
                       rightFourFingers={rightFourFingers}
                       applicantInfo={applicantInfo}
                       passportImage={passportImage}
-                      capturedFingers={defaultCaptured}
+                      capturedFingers={filteredCaptured}
                       isAmputeeChecked={isAmputeeChecked}
                     />
                   ) : (
@@ -364,6 +452,7 @@ export default function CapturePage() {
                     Fun_LRTCapture={Fun_LRTCapture}
                     isDeviceConnected={isDeviceConnected}
                     setIsAmputeeChecked={setIsAmputeeChecked}
+                    setMissingFingersToRemove={setMissingFingers}
                   />
                 </Grid>
               </Grid>
