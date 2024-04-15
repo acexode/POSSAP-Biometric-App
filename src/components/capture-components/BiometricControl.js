@@ -16,6 +16,7 @@ import {
   Divider,
   TextField,
   Typography,
+  Checkbox,
   FormHelperText,
   Autocomplete,
   Chip,
@@ -25,11 +26,12 @@ import {
   MenuItem,
   Grid,
   Card,
+  Select,
 } from "@material-ui/core";
 
 import { MIconButton } from "../@material-extend";
 import Label from "../Label";
-import Select from "../../theme/overrides/Select";
+// import Select from "../../theme/overrides/Select";
 import postBiometricData from "../../_apis_/PostBiometricData";
 import useAuth from "../../hooks/useAuth";
 import closeFill from "@iconify/icons-eva/close-fill";
@@ -61,8 +63,61 @@ const fingerCapture = [
     value: "TT",
   },
 ];
+export const singleFingersCapture = [
+  {
+    label: "Right Thumb",
+    value: "1",
+  },
+  {
+    label: "Right Index",
+    value: "2",
+  },
+  {
+    label: "Right Middle",
+    value: "3",
+  },
+  {
+    label: "Right Ring",
+    value: "4",
+  },
+  {
+    label: "Right Pinky",
+    value: "5",
+  },
+  {
+    label: "Left Thumb",
+    value: "6",
+  },
+  {
+    label: "Left Index",
+    value: "7",
+  },
+  {
+    label: "Left Middle",
+    value: "8",
+  },
+  {
+    label: "Left Ring",
+    value: "9",
+  },
+  {
+    label: "Left Pinky",
+    value: "10",
+  },
+];
 // ----------------------------------------------------------------------
-
+const fingers = [
+  "Left Pinky",
+  "Left Ring",
+  "Left Middle",
+  "Left Index",
+  "Left Thumb",
+  "Right Pinky",
+  "Right Ring",
+  "Right Middle",
+  "Right Index",
+  "Right Thumb",
+];
 const Incrementer = (props) => {
   const [field, , helpers] = useField(props);
   // eslint-disable-next-line react/prop-types
@@ -128,22 +183,38 @@ export default function BiometricControl({
   Fun_LRTCapture,
   toggleWebCam,
   fingerDataObject,
+  setIsAmputeeChecked,
+  setMissingFingersToRemove,
 }) {
   const [selectedFinger, setSelectedFinger] = useState(fingerCapture[0].value);
+  const [isAmputee, setIsAmputte] = useState(false);
+  const [missingFingers, setMissingFingers] = useState([]);
+  const [fingerArray, setFingerArray] = useState(fingerCapture);
+
+  const handleChange = (event) => {
+    setIsAmputte(event.target.checked);
+    setIsAmputeeChecked(event.target.checked);
+  };
+  const handleMissingChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setMissingFingers(value);
+  };
   const captureType = ["Left Hand", "Right Hand", "Two Thumb"];
   const { fileResult } = useAuth();
-  // useEffect(() => {
-  //   const postSampleData = async () => {
-  //     try {
-  //       const res = await postBiometricData(sampleData);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
+  useEffect(() => {
+    if (isAmputee) {
+      const filteredFingersCapture = singleFingersCapture.filter(
+        (finger) => !missingFingers.includes(finger.label)
+      );
+      setMissingFingersToRemove(filteredFingersCapture);
+      setFingerArray(filteredFingersCapture);
+    } else {
+      setFingerArray(fingerCapture);
+    }
+  }, [isAmputee, missingFingers]);
 
-  //   }
-  //   postSampleData()
-  // }, [])
-  
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const formik = useFormik({
     enableReinitialize: true,
@@ -167,6 +238,8 @@ export default function BiometricControl({
           ...fingerDataObject,
           ...values,
           RegisteredDate: formattedDate,
+          IsAmputee: isAmputee,
+          NoOfMissingFingers: missingFingers.length,
         };
         delete newValues?.ApplicantName;
         console.log(newValues);
@@ -199,7 +272,6 @@ export default function BiometricControl({
     formik;
 
   const handleCapture = () => {
-    console.log({ selectedFinger });
     Fun_LRTCapture(selectedFinger);
   };
 
@@ -282,7 +354,40 @@ export default function BiometricControl({
                 />
               </div>
             </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+                Is an Amputee?
+              </Typography>
+              <div style={{ width: 250 }}>
+                <Checkbox checked={isAmputee} onChange={handleChange} />
+              </div>
+            </Stack>
 
+            {isAmputee && (
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+                  Missing Fingers
+                </Typography>
+                <div style={{ width: 250 }}>
+                  <Select
+                    variant="outlined"
+                    fullWidth
+                    multiple
+                    value={missingFingers}
+                    onChange={handleMissingChange}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {fingers.map((fingrt) => (
+                      <MenuItem key={fingrt} value={fingrt}>
+                        {fingrt}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+              </Stack>
+            )}
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
                 Capture Finger
@@ -298,7 +403,7 @@ export default function BiometricControl({
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  {fingerCapture.map((finger) => (
+                  {fingerArray.map((finger) => (
                     <MenuItem key={finger.value} value={finger.value}>
                       {finger.label}
                     </MenuItem>

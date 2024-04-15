@@ -1,99 +1,122 @@
-import React from 'react';
-import Slider from 'react-slick';
-import { findIndex } from 'lodash';
-import PropTypes from 'prop-types';
-import { useState, useRef, useEffect } from 'react';
+import React from "react";
+import Slider from "react-slick";
+import { findIndex } from "lodash";
+import PropTypes from "prop-types";
+import { useState, useRef, useEffect } from "react";
 // material
-import { alpha, styled } from '@material-ui/core/styles';
-import {Box, Typography} from '@material-ui/core';
+import { alpha, styled } from "@material-ui/core/styles";
+import { Box, Typography } from "@material-ui/core";
 
-import LightboxModal from '../LightboxModal';
-import CarouselControlsArrowsIndex from '../CarouselControlsArrowsIndex';
-import RightDummy from "../../assets/static/home/RightFingers.png"
-import LeftDummy from "../../assets/static/home/LeftFingers.png"
-import ThumbDummy from "../../assets/static/home/TwoThumbs.png"
+import LightboxModal from "../LightboxModal";
+import CarouselControlsArrowsIndex from "../CarouselControlsArrowsIndex";
+import RightDummy from "../../assets/static/home/RightFingers.png";
+import LeftDummy from "../../assets/static/home/LeftFingers.png";
+import ThumbDummy from "../../assets/static/home/TwoThumbs.png";
 
 // ----------------------------------------------------------------------
 
 const THUMB_SIZE = 64;
 
-const RootStyle = styled('div')(({ theme }) => ({
-  '& .slick-slide': {
-    float: theme.direction === 'rtl' ? 'right' : 'left',
-    '&:focus': { outline: 'none' }
-  }
+const RootStyle = styled("div")(({ theme }) => ({
+  "& .slick-slide": {
+    float: theme.direction === "rtl" ? "right" : "left",
+    "&:focus": { outline: "none" },
+  },
 }));
 
-const ThumbWrapperStyle = styled('div')(({ theme }) => ({
-  cursor: 'pointer',
+const ThumbWrapperStyle = styled("div")(({ theme }) => ({
+  cursor: "pointer",
   width: THUMB_SIZE,
-  overflow: 'hidden',
+  overflow: "hidden",
   height: THUMB_SIZE,
-  position: 'relative',
+  position: "relative",
   margin: theme.spacing(0, 1),
   borderRadius: theme.shape.borderRadiusSm,
-  '&:hover': {
+  "&:hover": {
     opacity: 0.72,
-    transition: theme.transitions.create('opacity')
+    transition: theme.transitions.create("opacity"),
   },
-  '& .isActive': {
+  "& .isActive": {
     top: 0,
     zIndex: 9,
     opacity: 0,
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
+    width: "100%",
+    height: "100%",
+    position: "absolute",
     borderRadius: theme.shape.borderRadiusSm,
     border: `solid 3px ${theme.palette.primary.main}`,
-    backgroundColor: alpha(theme.palette.grey[900], 0.48)
-  }
+    backgroundColor: alpha(theme.palette.grey[900], 0.48),
+  },
 }));
 
-const LargeImgStyle = styled('img')({
+const LargeImgStyle = styled("img")({
   top: 0,
-  width: '498px',
-  height: '523px',
-  objectFit: 'cover',
-  position: 'absolute'
+  width: "498px",
+  height: "523px",
+  objectFit: "cover",
+  position: "absolute",
 });
 
-const ThumbImgStyle = styled('img')({
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover'
+const ThumbImgStyle = styled("img")({
+  width: "100%",
+  height: "80%",
+  objectFit: "cover",
 });
 
 // ----------------------------------------------------------------------
-const defaultImg = "https://previews.123rf.com/images/rclassenlayouts/rclassenlayouts1201/rclassenlayouts120100408/18834360-animal-paw-pet-wolf-paw-paw-bear-footprint-animal-paw-cat-paw-fingerprint-impression.jpg"
+const defaultImg =
+  "https://previews.123rf.com/images/rclassenlayouts/rclassenlayouts1201/rclassenlayouts120100408/18834360-animal-paw-pet-wolf-paw-paw-bear-footprint-animal-paw-cat-paw-fingerprint-impression.jpg";
 LargeItem.propTypes = {
   item: PropTypes.string,
-  onOpenLightbox: PropTypes.func
+  onOpenLightbox: PropTypes.func,
 };
 
 function LargeItem({ item, onOpenLightbox }) {
   return (
-    <Box sx={{ cursor: 'zoom-in', paddingTop: '100%', position: 'relative',display:"flex",justifyContent:"center",alignItems:"center" }}>
-
-      <LargeImgStyle  id={item?.id} alt={item.img} src={item?.img} onClick={() => onOpenLightbox(item?.img)} />
-
+    <Box
+      sx={{
+        cursor: "zoom-in",
+        paddingTop: "100%",
+        position: "relative",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <LargeImgStyle
+        id={item?.id}
+        alt={item.img}
+        src={item?.img}
+        onClick={() => onOpenLightbox(item?.img)}
+      />
     </Box>
   );
 }
 
 ThumbnailItem.propTypes = {
-  item: PropTypes.string
+  item: PropTypes.string,
 };
 
-function ThumbnailItem({ item }) {
+function ThumbnailItem({ item, title }) {
   return (
     <ThumbWrapperStyle>
       <Box className="isActive" />
-      <ThumbImgStyle alt="thumb image" src={item}  />
+      <ThumbImgStyle alt="thumb image" src={item} />
+      {title && <h3 style={{ fontSize: 7, textAlign: "center" }}>{title}</h3>}
     </ThumbWrapperStyle>
   );
 }
 
-export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs,leftFourFingers,rightFourFingers, passportImage}) {
+export default function CapturedDataCarousel({
+  applicantInfo,
+  previewImg,
+  twoThumbs,
+  leftFourFingers,
+  rightFourFingers,
+  passportImage,
+  capturedFingers,
+  isAmputeeChecked,
+}) {
   const [openLightbox, setOpenLightbox] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -101,6 +124,42 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
   const [nav2, setNav2] = useState(null);
   const slider1 = useRef(null);
   const slider2 = useRef(null);
+
+  const capturedImages = [
+    {
+      id: 1,
+      title: "Left Hand",
+      img: leftFourFingers
+        ? `data:image/${leftFourFingers?.imgType};base64,${leftFourFingers?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : LeftDummy,
+    },
+    {
+      id: 2,
+      title: "Right Hand",
+      img: rightFourFingers
+        ? `data:image/${rightFourFingers?.imgType};base64,${rightFourFingers?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : RightDummy,
+    },
+    {
+      id: 3,
+      title: "Two Thumbs",
+      img: twoThumbs
+        ? `data:image/${twoThumbs?.imgType};base64,${twoThumbs?.imgData}`
+        : previewImg
+        ? `data:image/png;base64,${previewImg.imgData}`
+        : ThumbDummy,
+    },
+    {
+      id: 4,
+      title: "Passport Image",
+      img: passportImage ? passportImage : defaultImg,
+    },
+  ];
+  const [defaultImages, setDefaultImages] = useState(capturedImages);
 
   const imagesLightbox = applicantInfo?.images?.map((_image) => _image);
 
@@ -110,34 +169,12 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
     setSelectedImage(selectedImage);
   };
   useEffect(() => {
-   console.log(applicantInfo);
-  }, [])
-
-    const capturedImages =[
-        {
-            id:1,
-            title:"Left Hand",
-            img: leftFourFingers ? `data:image/${leftFourFingers?.imgType};base64,${leftFourFingers?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : LeftDummy
-        },
-        {
-            id:2,
-            title:"Right Hand",
-            img: rightFourFingers ? `data:image/${rightFourFingers?.imgType};base64,${rightFourFingers?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : RightDummy
-        },
-        {
-            id:3,
-            title:"Two Thumbs",
-            img: twoThumbs ? `data:image/${twoThumbs?.imgType};base64,${twoThumbs?.imgData}` : previewImg ? `data:image/png;base64,${previewImg.imgData}` : ThumbDummy
-
-        },
-        {
-            id:4,
-            title:"Passport Image",
-            img: passportImage ? passportImage  : defaultImg
-
-        },
-
-    ]
+    if (isAmputeeChecked) {
+      setDefaultImages(capturedFingers);
+    } else {
+      setDefaultImages(capturedImages);
+    }
+  }, [isAmputeeChecked, capturedFingers, previewImg]);
 
   const settings1 = {
     dots: false,
@@ -146,7 +183,7 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
     draggable: false,
     slidesToScroll: 1,
     adaptiveHeight: true,
-    beforeChange: (current, next) => setCurrentIndex(next)
+    beforeChange: (current, next) => setCurrentIndex(next),
   };
 
   const settings2 = {
@@ -156,15 +193,15 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
     swipeToSlide: true,
     focusOnSelect: true,
     variableWidth: true,
-    centerPadding: '0px',
-    slidesToShow: applicantInfo.images.length > 4 ? 4 : applicantInfo.images.length
+    centerPadding: "0px",
+    slidesToShow:
+      applicantInfo.images.length > 4 ? 4 : applicantInfo.images.length,
   };
 
   useEffect(() => {
-
     setNav1(slider1.current);
     setNav2(slider2.current);
-   }, [currentIndex]);
+  }, [currentIndex]);
 
   const handlePrevious = () => {
     slider2.current.slickPrev();
@@ -181,30 +218,38 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
           sx={{
             zIndex: 0,
             borderRadius: 2,
-            overflow: 'hidden',
-            position: 'relative'
+            overflow: "hidden",
+            position: "relative",
           }}
         >
-
           <Slider {...settings1} asNavFor={nav2} ref={slider1}>
-            {capturedImages?.map((item,index) => (
-             <>
-                 <Typography style={{ textAlign: "center", margin: 2 }}>
-                     {" "}
-                     <span id="cmsg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+            {defaultImages?.map((item, index) => (
+              <>
+                <Typography style={{ textAlign: "center", margin: 2 }}>
+                  {" "}
+                  <span
+                    id="cmsg_id"
+                    style={{ fontSize: "15px", fontWeight: "bold" }}
+                  >
                     {previewImg?.msg}
-                    </span>
-                 </Typography> <Typography style={{ textAlign: "center", margin: 2 }}>
-                     {" "}
-                     <span id="cmsg_id" style={{ fontSize: "15px", fontWeight: "bold" }}>
+                  </span>
+                </Typography>{" "}
+                <Typography style={{ textAlign: "center", margin: 2 }}>
+                  {" "}
+                  <span
+                    id="cmsg_id"
+                    style={{ fontSize: "15px", fontWeight: "bold" }}
+                  >
                     {previewImg?.cmsg}
-                    </span>
-                 </Typography>
-                 <LargeItem key={index} item={item} onOpenLightbox={handleOpenLightbox}   />
-
-             </>
+                  </span>
+                </Typography>
+                <LargeItem
+                  key={index}
+                  item={item}
+                  onOpenLightbox={handleOpenLightbox}
+                />
+              </>
             ))}
-
           </Slider>
           <CarouselControlsArrowsIndex
             index={currentIndex}
@@ -218,36 +263,41 @@ export default function CapturedDataCarousel({applicantInfo,previewImg,twoThumbs
       <Box
         sx={{
           my: 3,
-          mx: 'auto',
-          display:"flex",
-          justifyContent:"center",
-          '& .slick-current .isActive': { opacity: 1 },
+          mx: "auto",
+          display: "flex",
+          justifyContent: "center",
+          "& .slick-current .isActive": { opacity: 1 },
           ...(applicantInfo.length === 1 && { maxWidth: THUMB_SIZE * 1 + 16 }),
           ...(applicantInfo.length === 2 && { maxWidth: THUMB_SIZE * 2 + 32 }),
           ...(applicantInfo.length === 3 && { maxWidth: THUMB_SIZE * 3 + 48 }),
           ...(applicantInfo.length === 4 && { maxWidth: THUMB_SIZE * 3 + 48 }),
           ...(applicantInfo.length >= 5 && { maxWidth: THUMB_SIZE * 6 }),
           ...(applicantInfo.length > 2 && {
-            position: 'relative',
-            '&:before, &:after': {
+            position: "relative",
+            "&:before, &:after": {
               top: 0,
               zIndex: 9,
               content: "''",
-              height: '100%',
-              position: 'absolute',
+              height: "100%",
+              position: "absolute",
               width: (THUMB_SIZE * 2) / 3,
               backgroundImage: (theme) =>
-                `linear-gradient(to left, ${alpha(theme.palette.background.paper, 0)} 0%, ${
-                  theme.palette.background.paper
-                } 100%)`
+                `linear-gradient(to left, ${alpha(
+                  theme.palette.background.paper,
+                  0
+                )} 0%, ${theme.palette.background.paper} 100%)`,
             },
-            '&:after': { right: 0, transform: 'scaleX(-1)' }
-          })
+            "&:after": { right: 0, transform: "scaleX(-1)" },
+          }),
         }}
       >
         <Slider {...settings2} asNavFor={nav1} ref={slider2}>
-          {capturedImages?.map((item,index) => (
-            <ThumbnailItem key={index} item={item.img} />
+          {defaultImages?.map((item, index) => (
+            <ThumbnailItem
+              key={index}
+              item={item.img}
+              title={isAmputeeChecked ? item.title : ""}
+            />
           ))}
         </Slider>
       </Box>
