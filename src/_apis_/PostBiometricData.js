@@ -20,7 +20,7 @@ const  getFinalPath = (data, type) => {
 
 export default async function postBiometricData(data) {
   console.log(data);
-  const finalUrl = getFinalPath(data, data.FileNumber)
+  const finalUrl = getFinalPath(data, data.FileNumber.slice(0,3))
   const body = computeCBSBody(
     "post",
     finalUrl,

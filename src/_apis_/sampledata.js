@@ -18,3 +18,24 @@ export const sampleData = {
     "Comment": "please treat this ",
     "RegisteredDate": "2024-03-11"
 }
+
+
+// useEffect(() => {
+//     const newValues = {
+//       ...sampleData,
+//       RegisteredDate: '2024-04-15',
+//       FileNumber: fileResult?.RefNumber,
+//       IsAmputee: isAmputee,
+//       NoOfMissingFingers: missingFingers.length,
+//     };
+//     console.log(newValues);
+//     const submit = async() =>{
+//       try {
+//         const res = await postBiometricData(newValues);
+//         console.log(res);
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     }
+//     submit()
+//   }, [])
