@@ -262,7 +262,7 @@ export default function CapturePage() {
     RightFourFingerPrint: rightFourFingers?.imgData ?? MissingFinger,
     TwoThumbPrint: twoThumbs?.imgData ?? MissingFinger,
     Token: token,
-    PassportImage: newPassport ?? MissingFinger,
+    PassportImage: newPassport,
   };
   const fingerImgObject = {};
   fingers?.forEach((item) => {

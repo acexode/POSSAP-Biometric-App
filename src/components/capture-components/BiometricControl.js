@@ -465,7 +465,9 @@ export default function BiometricControl({
             <Button
               fullWidth
               size="large"
-              disabled={isSubmitting}
+              disabled={
+                isSubmitting || fingerDataObject?.PassportImage === undefined
+              }
               type="submit"
               variant="contained"
             >
