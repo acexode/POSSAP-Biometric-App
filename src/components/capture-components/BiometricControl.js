@@ -242,7 +242,7 @@ export default function BiometricControl({
           NoOfMissingFingers: missingFingers.length,
         };
         delete newValues?.ApplicantName;
-        console.log(newValues);
+        // console.log(newValues);
         const res = await postBiometricData(newValues);
         console.log({ res });
         enqueueSnackbar("Success", {
