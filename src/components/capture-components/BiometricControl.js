@@ -27,7 +27,7 @@ import {
   Grid,
   Card,
   Select,
-} from "@material-ui/core";
+  } from "@material-ui/core";
 
 import { MIconButton } from "../@material-extend";
 import Label from "../Label";
@@ -36,6 +36,7 @@ import postBiometricData from "../../_apis_/PostBiometricData";
 import useAuth from "../../hooks/useAuth";
 import closeFill from "@iconify/icons-eva/close-fill";
 import { useSnackbar } from "notistack5";
+import { createStyles, withStyles } from "@material-ui/styles";
 // import { sampleData } from "../../_apis_/sampledata";
 
 // ----------------------------------------------------------------------
@@ -46,6 +47,26 @@ const RootStyle = styled("div")(({ theme }) => ({
     // padding: theme.spacing(5, 8),
   },
 }));
+const CustomMenuItem = withStyles((theme) =>createStyles({
+  root:{
+        "&$selected": {
+            backgroundColor: "#ff484229",
+            color: "#B72136",
+            "&:hover": {
+                backgroundColor: "#EBF0FF",
+                color: "#000",
+            }
+    },
+    '&:hover':{
+      backgroundColor:'#EBF0FF'
+    }
+  },
+  selected:{
+    color: "#B72136",
+    fontWeight: 700
+  }
+})
+)(MenuItem);
 
 const FINGERS = [" Little", " Ring", " Middle", " Index", " Thumb"];
 const fingerCapture = [
@@ -380,15 +401,9 @@ export default function BiometricControl({
                       <em>None</em>
                     </MenuItem>
                     {fingers.map((fingrt) => (
-                      <MenuItem 
-                        key={fingrt} 
-                        value={fingrt}
-                        style={{
-                          backgroundColor: missingFingers.includes(fingrt) ? 'white' : 'transparent',
-                          color: missingFingers.includes(fingrt) ? '#ff0000' : 'inherit' 
-                    }} > 
+                      <CustomMenuItem key={fingrt} value={fingrt}>
                         {fingrt}
-                      </MenuItem>
+                      </CustomMenuItem>
                     ))}
                   </Select>
                 </div>
