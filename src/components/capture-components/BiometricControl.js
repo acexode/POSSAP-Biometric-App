@@ -380,7 +380,13 @@ export default function BiometricControl({
                       <em>None</em>
                     </MenuItem>
                     {fingers.map((fingrt) => (
-                      <MenuItem key={fingrt} value={fingrt}>
+                      <MenuItem 
+                        key={fingrt} 
+                        value={fingrt}
+                        style={{
+                          backgroundColor: missingFingers.includes(fingrt) ? 'white' : 'transparent',
+                          color: missingFingers.includes(fingrt) ? '#ff0000' : 'inherit' 
+                    }} > 
                         {fingrt}
                       </MenuItem>
                     ))}
