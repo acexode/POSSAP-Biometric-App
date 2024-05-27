@@ -302,9 +302,7 @@ export default function CapturePage() {
       // Add more cases for other finger numbers if needed
     }
     if (fingerName) {
-      fingerDataObject[
-        fingerName
-      ] = `data:image/${item?.imgType?.toLowerCase()};base64,${item.imgData}`;
+      fingerDataObject[fingerName] = `${item.imgData}`;
 
       fingerImgObject[fingerName] = dataURLtoFile(
         `data:image/${item?.imgType?.toLowerCase()};base64,${item.imgData}`,
