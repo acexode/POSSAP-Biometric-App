@@ -311,11 +311,13 @@ export default function CapturePage() {
     }
   });
 
-  remainFingers.forEach((item) => {
+  remainFingers.forEach((item, i) => {
     if (fingerDataObject[item]) {
       return;
-    } else {
+    } else if (isAmputeeChecked) {
       fingerDataObject[item] = MissingFinger;
+    } else {
+      fingerDataObject[item] = fingerss[i + 1]?.imgData;
     }
   });
 
@@ -414,7 +416,6 @@ export default function CapturePage() {
   const filteredCaptured = defaultCaptured.filter((finger) =>
     missingFingers.some((data) => data.value === String(finger.id))
   );
-
   return (
     <Page title="Capture | POSSAP Biometric">
       <Container maxWidth="lg">
