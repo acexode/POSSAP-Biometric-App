@@ -232,7 +232,7 @@ export default function CapturePage() {
           }
           for (let i = 0; i < fcount; i++) {
             const fidx = result.fingers[i].fingerNo;
-            console.log(result.fingers[i]);
+            console.log(result.fingers);
             if (fingerss[result.fingers[i].fingerNo]) {
               setFingerss((prevState) => ({
                 ...prevState,
@@ -317,7 +317,16 @@ export default function CapturePage() {
     } else if (isAmputeeChecked) {
       fingerDataObject[item] = MissingFinger;
     } else {
-      fingerDataObject[item] = fingerss[i + 1]?.imgData;
+      fingerDataObject["LeftPinky"] = fingerss[10]?.imgData;
+      fingerDataObject["LeftRing"] = fingerss[9]?.imgData;
+      fingerDataObject["LeftMiddle"] = fingerss[8]?.imgData;
+      fingerDataObject["LeftIndex"] = fingerss[7]?.imgData;
+      fingerDataObject["LeftThumb"] = fingerss[6]?.imgData;
+      fingerDataObject["RightPinky"] = fingerss[5]?.imgData;
+      fingerDataObject["RightRing"] = fingerss[4]?.imgData;
+      fingerDataObject["RightMiddle"] = fingerss[3]?.imgData;
+      fingerDataObject["RightIndex"] = fingerss[2]?.imgData;
+      fingerDataObject["RightThumb"] = fingerss[1]?.imgData;
     }
   });
 
