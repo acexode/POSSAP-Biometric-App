@@ -170,7 +170,7 @@ export default function CapturePage() {
   }
 
   function Fun_LRTCapture(capType) {
-    let capMode = "ROLLED";
+    let capMode = "PLAIN";
 
     Fun_Live_Preview();
     fingerRef?.current?.scrollIntoView();
@@ -217,7 +217,6 @@ export default function CapturePage() {
         if (status === 200) {
           const result = JSON.parse(xhr.responseText);
           if (result.errMsg !== "") console.log({ result });
-
           const scount = result.slapCount;
           for (let i = 0; i < scount; i++) {
             const stype = result.slaps[i].slapType;
@@ -228,11 +227,11 @@ export default function CapturePage() {
 
           const fcount = result.fingerCount;
           if (result?.slaps.length === 0) {
+            // console.log({ result });
             setFingers((prev) => [...prev, ...result?.fingers]);
           }
           for (let i = 0; i < fcount; i++) {
             const fidx = result.fingers[i].fingerNo;
-            console.log(result.fingers);
             if (fingerss[result.fingers[i].fingerNo]) {
               setFingerss((prevState) => ({
                 ...prevState,
