@@ -170,7 +170,7 @@ export default function CapturePage() {
   }
 
   function Fun_LRTCapture(capType) {
-    let capMode = "ROLLED";
+    let capMode = "PLAIN";
 
     Fun_Live_Preview();
     fingerRef?.current?.scrollIntoView();
@@ -217,7 +217,6 @@ export default function CapturePage() {
         if (status === 200) {
           const result = JSON.parse(xhr.responseText);
           if (result.errMsg !== "") console.log({ result });
-
           const scount = result.slapCount;
           for (let i = 0; i < scount; i++) {
             const stype = result.slaps[i].slapType;
@@ -228,11 +227,11 @@ export default function CapturePage() {
 
           const fcount = result.fingerCount;
           if (result?.slaps.length === 0) {
+            // console.log({ result });
             setFingers((prev) => [...prev, ...result?.fingers]);
           }
           for (let i = 0; i < fcount; i++) {
             const fidx = result.fingers[i].fingerNo;
-            console.log(result.fingers[i]);
             if (fingerss[result.fingers[i].fingerNo]) {
               setFingerss((prevState) => ({
                 ...prevState,
@@ -317,7 +316,16 @@ export default function CapturePage() {
     } else if (isAmputeeChecked) {
       fingerDataObject[item] = MissingFinger;
     } else {
-      fingerDataObject[item] = fingerss[i + 1]?.imgData;
+      fingerDataObject["LeftPinky"] = fingerss[10]?.imgData;
+      fingerDataObject["LeftRing"] = fingerss[9]?.imgData;
+      fingerDataObject["LeftMiddle"] = fingerss[8]?.imgData;
+      fingerDataObject["LeftIndex"] = fingerss[7]?.imgData;
+      fingerDataObject["LeftThumb"] = fingerss[6]?.imgData;
+      fingerDataObject["RightPinky"] = fingerss[5]?.imgData;
+      fingerDataObject["RightRing"] = fingerss[4]?.imgData;
+      fingerDataObject["RightMiddle"] = fingerss[3]?.imgData;
+      fingerDataObject["RightIndex"] = fingerss[2]?.imgData;
+      fingerDataObject["RightThumb"] = fingerss[1]?.imgData;
     }
   });
 
