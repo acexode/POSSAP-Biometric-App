@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Icon } from "@iconify/react";
-import Webcam from "react-webcam";
-import plusFill from "@iconify/icons-eva/plus-fill";
-import minusFill from "@iconify/icons-eva/minus-fill";
-import fingerPrint from "@iconify/icons-ic/baseline-fingerprint";
-import portrait from "@iconify/icons-ic/portrait";
+import React, { useEffect, useState } from 'react';
+import { Icon } from '@iconify/react';
+import Webcam from 'react-webcam';
+import plusFill from '@iconify/icons-eva/plus-fill';
+import minusFill from '@iconify/icons-eva/minus-fill';
+import fingerPrint from '@iconify/icons-ic/baseline-fingerprint';
+import portrait from '@iconify/icons-ic/portrait';
 
-import { useFormik, Form, FormikProvider, useField } from "formik";
+import { useFormik, Form, FormikProvider, useField } from 'formik';
 // material
-import { styled } from "@material-ui/core/styles";
+import { styled } from '@material-ui/core/styles';
 import {
   Box,
   Stack,
@@ -27,96 +27,96 @@ import {
   Grid,
   Card,
   Select,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { MIconButton } from "../@material-extend";
-import Label from "../Label";
+import { MIconButton } from '../@material-extend';
+import Label from '../Label';
 // import Select from "../../theme/overrides/Select";
-import postBiometricData from "../../_apis_/PostBiometricData";
-import useAuth from "../../hooks/useAuth";
-import closeFill from "@iconify/icons-eva/close-fill";
-import { useSnackbar } from "notistack5";
+import postBiometricData from '../../_apis_/PostBiometricData';
+import useAuth from '../../hooks/useAuth';
+import closeFill from '@iconify/icons-eva/close-fill';
+import { useSnackbar } from 'notistack5';
 // import { sampleData } from "../../_apis_/sampledata";
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled("div")(({ theme }) => ({
+const RootStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(3),
   [theme.breakpoints.up(1368)]: {
     // padding: theme.spacing(5, 8),
   },
 }));
 
-const FINGERS = [" Little", " Ring", " Middle", " Index", " Thumb"];
+const FINGERS = [' Little', ' Ring', ' Middle', ' Index', ' Thumb'];
 const fingerCapture = [
   {
-    label: "Left Hand",
-    value: "LH",
+    label: 'Left Hand',
+    value: 'LH',
   },
   {
-    label: "Right Hand",
-    value: "RH",
+    label: 'Right Hand',
+    value: 'RH',
   },
 
   {
-    label: "Two Thumbs",
-    value: "TT",
+    label: 'Two Thumbs',
+    value: 'TT',
   },
 ];
 export const singleFingersCapture = [
   {
-    label: "Right Thumb",
-    value: "1",
+    label: 'Right Thumb',
+    value: '1',
   },
   {
-    label: "Right Index",
-    value: "2",
+    label: 'Right Index',
+    value: '2',
   },
   {
-    label: "Right Middle",
-    value: "3",
+    label: 'Right Middle',
+    value: '3',
   },
   {
-    label: "Right Ring",
-    value: "4",
+    label: 'Right Ring',
+    value: '4',
   },
   {
-    label: "Right Pinky",
-    value: "5",
+    label: 'Right Pinky',
+    value: '5',
   },
   {
-    label: "Left Thumb",
-    value: "6",
+    label: 'Left Thumb',
+    value: '6',
   },
   {
-    label: "Left Index",
-    value: "7",
+    label: 'Left Index',
+    value: '7',
   },
   {
-    label: "Left Middle",
-    value: "8",
+    label: 'Left Middle',
+    value: '8',
   },
   {
-    label: "Left Ring",
-    value: "9",
+    label: 'Left Ring',
+    value: '9',
   },
   {
-    label: "Left Pinky",
-    value: "10",
+    label: 'Left Pinky',
+    value: '10',
   },
 ];
 // ----------------------------------------------------------------------
 const fingers = [
-  "Left Pinky",
-  "Left Ring",
-  "Left Middle",
-  "Left Index",
-  "Left Thumb",
-  "Right Pinky",
-  "Right Ring",
-  "Right Middle",
-  "Right Index",
-  "Right Thumb",
+  'Left Pinky',
+  'Left Ring',
+  'Left Middle',
+  'Left Index',
+  'Left Thumb',
+  'Right Pinky',
+  'Right Ring',
+  'Right Middle',
+  'Right Index',
+  'Right Thumb',
 ];
 const Incrementer = (props) => {
   const [field, , helpers] = useField(props);
@@ -140,9 +140,9 @@ const Incrementer = (props) => {
         border: 1,
         lineHeight: 0,
         borderRadius: 1,
-        display: "flex",
-        alignItems: "center",
-        borderColor: "grey.50032",
+        display: 'flex',
+        alignItems: 'center',
+        borderColor: 'grey.50032',
       }}
     >
       <MIconButton
@@ -158,8 +158,8 @@ const Incrementer = (props) => {
         component="span"
         sx={{
           width: 40,
-          textAlign: "center",
-          display: "inline-block",
+          textAlign: 'center',
+          display: 'inline-block',
         }}
       >
         {value}
@@ -201,12 +201,12 @@ export default function BiometricControl({
     } = event;
     setMissingFingers(value);
   };
-  const captureType = ["Left Hand", "Right Hand", "Two Thumb"];
+  const captureType = ['Left Hand', 'Right Hand', 'Two Thumb'];
   const { fileResult } = useAuth();
   useEffect(() => {
     if (isAmputee) {
       const filteredFingersCapture = singleFingersCapture.filter(
-        (finger) => !missingFingers.includes(finger.label)
+        (finger) => !missingFingers.includes(finger.label),
       );
       setMissingFingersToRemove(filteredFingersCapture);
       setFingerArray(filteredFingersCapture);
@@ -221,15 +221,15 @@ export default function BiometricControl({
     initialValues: {
       FileNumber: fileResult?.RefNumber,
       ApplicantName: fileResult?.CustomerName,
-      Comment: "",
+      Comment: '',
     },
     onSubmit: async (values, { setSubmitting }) => {
       const currentDate = new Date();
 
       // Get the year, month, and day from the current date
       const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-      const day = String(currentDate.getDate()).padStart(2, "0");
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
 
       // Format the date in "YYYY-MM-DD" format
       const formattedDate = `${year}-${month}-${day}`;
@@ -242,11 +242,10 @@ export default function BiometricControl({
           NoOfMissingFingers: missingFingers.length,
         };
         delete newValues?.ApplicantName;
-        // console.log(newValues);
         const res = await postBiometricData(newValues);
         console.log({ res });
-        enqueueSnackbar("Success", {
-          variant: "success",
+        enqueueSnackbar('Success', {
+          variant: 'success',
           action: (key) => (
             <MIconButton size="small" onClick={() => closeSnackbar(key)}>
               <Icon icon={closeFill} />
@@ -256,7 +255,7 @@ export default function BiometricControl({
         setSubmitting(true);
       } catch (error) {
         enqueueSnackbar(error?.response?.data?.message, {
-          variant: "error",
+          variant: 'error',
           action: (key) => (
             <MIconButton size="small" onClick={() => closeSnackbar(key)}>
               <Icon icon={closeFill} />
@@ -274,6 +273,13 @@ export default function BiometricControl({
   const handleCapture = () => {
     Fun_LRTCapture(selectedFinger);
   };
+  const isBtnDisabled = !isAmputee
+    ? isSubmitting ||
+      fingerDataObject?.PassportImage === undefined ||
+      fingerDataObject?.LeftFourFingerPrint === undefined ||
+      fingerDataObject?.RightFourFingerPrint === undefined ||
+      fingerDataObject?.TwoThumbPrint === undefined
+    : isSubmitting || fingerDataObject?.PassportImage === undefined;
 
   return (
     <RootStyle>
@@ -283,7 +289,7 @@ export default function BiometricControl({
             <Label
               variant="ghost"
               color="success"
-              sx={{ textTransform: "uppercase" }}
+              sx={{ textTransform: 'uppercase' }}
             >
               Device Connected
             </Label>
@@ -291,7 +297,7 @@ export default function BiometricControl({
             <Label
               variant="ghost"
               color="error"
-              sx={{ textTransform: "uppercase" }}
+              sx={{ textTransform: 'uppercase' }}
             >
               Device not Connected
             </Label>
@@ -301,8 +307,8 @@ export default function BiometricControl({
             sx={{
               mt: 2,
               mb: 1,
-              display: "block",
-              color: "info.main",
+              display: 'block',
+              color: 'info.main',
             }}
           >
             JPEG
@@ -321,7 +327,7 @@ export default function BiometricControl({
             {device}
           </Stack>
 
-          <Divider sx={{ borderStyle: "dashed" }} />
+          <Divider sx={{ borderStyle: 'dashed' }} />
 
           <Stack spacing={3} sx={{ my: 3 }}>
             <Stack direction="row" justifyContent="space-between">
@@ -333,7 +339,7 @@ export default function BiometricControl({
                   fullWidth
                   label="Applicant Name"
                   disabled={true}
-                  {...getFieldProps("ApplicantName")}
+                  {...getFieldProps('ApplicantName')}
                   error={Boolean(touched.ApplicantName && errors.ApplicantName)}
                   helperText={touched.ApplicantName && errors.ApplicantName}
                 />
@@ -348,7 +354,7 @@ export default function BiometricControl({
                   fullWidth
                   disabled={true}
                   label="File Number"
-                  {...getFieldProps("FileNumber")}
+                  {...getFieldProps('FileNumber')}
                   error={Boolean(touched.FileNumber && errors.FileNumber)}
                   helperText={touched.FileNumber && errors.FileNumber}
                 />
@@ -421,7 +427,7 @@ export default function BiometricControl({
                   fullWidth
                   label="Comment"
                   multiline
-                  {...getFieldProps("Comment")}
+                  {...getFieldProps('Comment')}
                   error={Boolean(touched.Comment && errors.Comment)}
                   helperText={touched.Comment && errors.Comment}
                 />
@@ -429,11 +435,11 @@ export default function BiometricControl({
             </Stack>
           </Stack>
 
-          <Divider sx={{ borderStyle: "dashed" }} />
+          <Divider sx={{ borderStyle: 'dashed' }} />
 
           <Stack
             spacing={2}
-            direction={{ xs: "column", sm: "row" }}
+            direction={{ xs: 'column', sm: 'row' }}
             sx={{ mt: 5 }}
           >
             <Button
@@ -444,7 +450,7 @@ export default function BiometricControl({
               variant="contained"
               startIcon={<Icon icon={fingerPrint} />}
               onClick={handleCapture}
-              sx={{ whiteSpace: "nowrap" }}
+              sx={{ whiteSpace: 'nowrap' }}
             >
               Capture
             </Button>
@@ -456,7 +462,7 @@ export default function BiometricControl({
               variant="contained"
               startIcon={<Icon icon={portrait} />}
               onClick={toggleWebCam}
-              sx={{ whiteSpace: "nowrap" }}
+              sx={{ whiteSpace: 'nowrap' }}
             >
               Image Capture
             </Button>
@@ -465,9 +471,7 @@ export default function BiometricControl({
             <Button
               fullWidth
               size="large"
-              disabled={
-                isSubmitting || fingerDataObject?.PassportImage === undefined
-              }
+              disabled={isBtnDisabled}
               type="submit"
               variant="contained"
             >
