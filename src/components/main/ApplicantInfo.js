@@ -155,7 +155,7 @@ export default function ApplicantInfo({ handleDeviceLoad }) {
           variant="contained"
           onClick={handleDeviceLoad}
           endIcon={<Icon icon={arrowIosForwardFill} />}
-          // disabled={!fileResult}
+          disabled={!fileResult}
         >
           Enroll
         </LoadingButton>
