@@ -1,10 +1,9 @@
 {
-    "ApiUrl1": "https://admin.possap.ng/api/v1/pss",
-    "ApiUrl": "https://test.possap.ng/api/v1/pss",
-    "ApiUrl3": "http://pss.cbs/api/v1/pss",
-    "middlewareApi": "https://possapbackend-development.ogtlprojects.com/api/v1",
-    "cbsRoute": "https://possapbackend-development.ogtlprojects.com/api/v1/cbs-routes",
-    "cbsRoute1": "http://localhost:5000/api/v1/cbs-routes",
-    "clientId": "5E2VhG91FhbuQCUGBS5dn69tiHda+RNfl0cRe+2MHbY=",
-    "clientSecret": "eZH3V/x1uqUOCkxLXlNL/oICIy8zR0989urYn0K05Z3z/t9PbjB0OolMJ/PA"
+  "ApiUrl1": "https://admin.possap.ng/api/v1/pss",
+  "ApiUrl3": "http://pss.cbs/api/v1/pss",
+  "middlewareApi": "https://possap-api-revamp.ogtlprojects.com",
+  "cbsRoute": "https://possap-api-revamp.ogtlprojects.com/cbs-routes",
+  "cbsRoute1": "http://localhost:5000/api/v1/cbs-routes",
+  "clientId": "5E2VhG91FhbuQCUGBS5dn69tiHda+RNfl0cRe+2MHbY=",
+  "clientSecret": "eZH3V/x1uqUOCkxLXlNL/oICIy8zR0989urYn0K05Z3z/t9PbjB0OolMJ/PA"
 }
